@@ -16,6 +16,10 @@ import {
 } from "lucide-react";
 import { useLearning } from "./useLearning";
 import { AccountPanel } from "./AccountPanel";
+import {
+  DictionaryProvider,
+  DictionaryButton,
+} from "./features/dictionary/Dictionary";
 import BrandLogo from "./features/BrandLogo";
 import { StudioProvider } from "./features/studio/StudioProgress";
 import Leaderboard, { RankCard } from "./features/studio/Leaderboard";
@@ -73,7 +77,9 @@ export default function App() {
   const l = useLearning();
   return (
     <StudioProvider key={l.user?.id ?? "guest"} scope={l.user?.id ?? "guest"}>
-      <Workspace learning={l} />
+      <DictionaryProvider>
+        <Workspace learning={l} />
+      </DictionaryProvider>
     </StudioProvider>
   );
 }
@@ -156,7 +162,8 @@ function Workspace({
             <span>/</span>
             <strong>{label}</strong>
           </div>
-          <span className="pill">GERMAN · B1–B2</span>
+          <DictionaryButton />
+          <span className="pill level-pill">GERMAN · B1–B2</span>
         </header>
         <main id="main">
           <AccountPanel learning={l} />
@@ -442,7 +449,13 @@ function Workspace({
               deutsch<span>·</span>
             </strong>
             <p>A little every day. A world of possibility.</p>
-            <span>Made for Uyên ✧</span>
+            <span>
+              Made for Uyên ✧ ·{" "}
+              <a href="https://ngophuonguyen.github.io/ngophuonguyen21010/">
+                Latest live app ↗
+              </a>{" "}
+              · Build {import.meta.env.VITE_BUILD_SHA?.slice(0, 7) || "local"}
+            </span>
           </footer>
         </main>
       </div>

@@ -2421,3 +2421,119 @@ footer > span {
     padding: 5px 7px;
   }
 }
+
+/* Shared dictionary keeps lesson context visible while supporting keyboard lookup. */
+.global-dictionary {
+  position: fixed;
+  right: 24px;
+  top: 88px;
+  width: min(440px, calc(100vw - 32px));
+  max-height: calc(100dvh - 116px);
+  overflow-y: auto;
+  z-index: 90;
+  box-shadow: 0 20px 80px #000a;
+  border-color: var(--rose);
+  padding: 24px;
+}
+.global-dictionary h2 {
+  font-size: 25px;
+  margin: 12px 0 20px;
+}
+.global-dictionary h3 {
+  margin: 22px 0 12px;
+}
+.global-dictionary form {
+  display: grid;
+  gap: 12px;
+}
+.global-dictionary .eyebrow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.global-dictionary blockquote {
+  font-size: 14px;
+  line-height: 1.7;
+  margin: 16px 0;
+  padding-left: 12px;
+  border-left: 2px solid #d491b2;
+}
+.dictionary-sense {
+  padding: 16px 0;
+  border-bottom: 1px solid #ffffff12;
+}
+.dictionary-sense p {
+  line-height: 1.7;
+}
+.dictionary-sources {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+  font-size: 12px;
+}
+.dictionary-meaning {
+  font-size: 20px;
+  font-weight: 600;
+}
+.german-text .universal-word {
+  font: inherit;
+  color: inherit;
+  line-height: inherit;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  display: inline;
+  border-radius: 3px;
+  text-align: inherit;
+}
+.german-text .universal-word:hover,
+.german-text .universal-word:focus-visible {
+  background: #d491b22c;
+  color: #f0b1d1;
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.german-text {
+  white-space: pre-wrap;
+}
+.cue-german .universal-word {
+  font: inherit;
+}
+.cue-insight {
+  font-size: 11px;
+  padding: 4px 0;
+  margin: 0 0 8px;
+}
+.dictionary-launch {
+  margin-left: auto;
+  white-space: nowrap;
+}
+.topbar {
+  gap: 12px;
+}
+@media (max-width: 720px) {
+  .global-dictionary {
+    top: 76px;
+    right: 12px;
+    width: calc(100vw - 24px);
+    max-height: calc(100dvh - 154px);
+    padding: 20px;
+  }
+  .level-pill {
+    display: none;
+  }
+  .dictionary-launch {
+    padding: 8px;
+  }
+}
+.study-cue > p.cue-german {
+  font-size: 16px;
+  color: var(--ink);
+  margin: 0 0 6px;
+}
+@media (max-width: 720px) {
+  .study-cue > p.cue-german {
+    font-size: 15px;
+  }
+}

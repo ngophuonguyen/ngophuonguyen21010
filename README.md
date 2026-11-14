@@ -1,5 +1,7 @@
 # Deutsch · Your everyday German
 
+**[Open the latest live app](https://ngophuonguyen.github.io/ngophuonguyen21010/)** · Automatically updated after a successful main-branch deployment.
+
 A React + TypeScript learning studio for German B1–B2, published with GitHub Pages.
 
 ## Run and verify
@@ -102,3 +104,15 @@ The endpoint must use HTTPS (localhost is accepted for development), allow the a
 Return a playable audio body with `Content-Type: audio/*`, at most 15 MB, within 30 seconds. The frontend sends the requested German text to that configured endpoint. Keep all provider keys, authentication enforcement, voice allowlists, request-size limits, quotas, and billing controls on the server. A Supabase endpoint on the configured Supabase project's origin receives the signed-in user's bearer token and public project key; arbitrary endpoint origins never receive that token. Other endpoints must implement their own authentication (same-origin cookies are supported). A provider server is not provisioned by this change, and GitHub Pages cannot run it.
 
 Pull requests run unit tests and a production build. Only main-branch pushes or manual workflow runs publish Pages. Tests additionally cover decay boundaries, reward idempotency, pass ordering, played-range coverage, transcript/URL validation, early recall, and corrupt studio storage.
+
+## Dictionary everywhere
+
+Use the top-bar Dictionary button to search any German word or short expression. Click words in vocabulary examples, scenarios, collocations, corrected feedback, review examples, and visible listening transcripts. German headings also support pointer lookup. The original reading sidebar and sentence/passage translations remain intact. Keyboard users can Tab to words in examples and transcripts and press Enter; Escape closes the non-modal dictionary panel.
+
+Curated lesson entries load instantly offline. Other terms use the experimental English Wiktionary definition endpoint, restricted to German entries, with bounded in-memory caching, cancellation, a ten-second timeout, case variants, and source attribution (CC BY-SA 4.0). Only the searched term is sent; sentence context is not transmitted. Provider coverage and availability vary: unavailable words, compound forms, or network failures offer direct Wiktionary, DWDS, and PONS links instead of invented meanings. Inflection, gender, and plural details are shown when curated; use the full dictionary entry for remaining grammar.
+
+The supplied update contains only Part 1 of 4. Its Berlin teaching passage is integrated as a second synthetic three-pass lesson with authored English translations/grammar notes. Missing curriculum components and the announced seven datasets/74-entry lexicon are not included in that file and are not claimed as installed. The existing TypeScript architecture, English interface, complete learning workflow, and rose/plum design are preserved.
+
+## Latest-version links on every release
+
+The PR template starts with the permanent live-app link. The Pages workflow updates the associated merged PR description with its verified deployment URL and commit only after deployment succeeds. README always links to the latest production build; a PR awaiting merge still points to the existing production version. The footer identifies the build, and `_build.json` publishes its full commit and build time for verification. Source changes reach the live link after main's Pages deployment completes.

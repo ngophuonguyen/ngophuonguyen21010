@@ -1,3 +1,5 @@
+import { GermanText } from "../dictionary/Dictionary";
+import { berlinLesson } from "../../content/berlin";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { ArrowRight, Check, Lock, Plus, Volume2 } from "lucide-react";
 import { passages } from "../../content/course";
@@ -57,7 +59,7 @@ export default function ListeningStudio({
     },
     [],
   );
-  const library = useMemo(() => [demo, ...lessons], [lessons]),
+  const library = useMemo(() => [demo, berlinLesson, ...lessons], [lessons]),
     lesson = library.find((l) => l.id === selected) ?? demo,
     progress = state.listening[lesson.id] ?? emptyPass(),
     pass = progress.pass;
@@ -433,7 +435,8 @@ export default function ListeningStudio({
                   : "Connect sound and meaning."}
               </h3>
               <span className="micro">
-                Click a sentence for its authored grammar note.
+                Click a word for its meaning. Use Grammar insight for the
+                sentence note.
               </span>
             </div>
             {lesson.cues.map((c, i) => (
@@ -441,12 +444,16 @@ export default function ListeningStudio({
                 key={i}
                 className={"study-cue " + (i === cue ? "current" : "")}
               >
+                <p className="cue-german">
+                  <GermanText text={c.de} />
+                </p>
                 <button
-                  className="cue-german"
-                  lang="de"
+                  type="button"
+                  className="button subtle cue-insight"
+                  aria-label={`Grammar insight for sentence ${i + 1}`}
                   onClick={() => setInsight(insight === i ? null : i)}
                 >
-                  {c.de}
+                  Grammar insight
                 </button>
                 {pass === 2 && (
                   <p lang="en">
