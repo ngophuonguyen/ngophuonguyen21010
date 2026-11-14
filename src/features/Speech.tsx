@@ -1,3 +1,4 @@
+import { useGermanAudio } from "./studio/useGermanAudio";
 import { useEffect, useRef, useState } from "react";
 import { Mic, Square, Volume2 } from "lucide-react";
 type Recognition = {
@@ -19,35 +20,28 @@ export function ListenButton({
   text: string;
   label?: string;
 }) {
-  const [notice, setNotice] = useState("");
-  useEffect(() => () => window.speechSynthesis?.cancel(), []);
+  const audio = useGermanAudio();
   return (
     <>
       <button
         className="button secondary"
+        disabled={audio.status === "loading"}
         onClick={() => {
-          if (!window.speechSynthesis) {
-            setNotice(
-              "Speech playback is unavailable in this browser. Read the prompt instead.",
-            );
-            return;
-          }
-          window.speechSynthesis.cancel();
-          const u = new SpeechSynthesisUtterance(text);
-          u.lang = "de-DE";
-          u.rate = 0.88;
-          u.onerror = () =>
-            setNotice(
-              "Playback failed. Check the available German voices on your device.",
-            );
-          window.speechSynthesis.speak(u);
-          setNotice("Playing a synthetic German voice.");
+          if (audio.status === "playing") audio.pause();
+          else if (audio.status === "paused") void audio.resume();
+          else void audio.speak(text);
         }}
       >
         <Volume2 size={16} />
-        {label}
+        {audio.status === "loading"
+          ? "Loading audio…"
+          : audio.status === "playing"
+            ? "Pause audio"
+            : audio.status === "paused"
+              ? "Resume audio"
+              : label}
       </button>
-      <small role="status">{notice}</small>
+      <small role="status">{audio.error || audio.mode}</small>
     </>
   );
 }
