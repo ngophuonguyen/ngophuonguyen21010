@@ -1,12 +1,190 @@
-import {useState} from 'react';
-export const listeningLessons=[
- {id:'easy-conversation',title:'Bắt chuyện và làm quen',level:'B1–B2',source:'Easy German · YouTube',url:'https://www.youtube.com/watch?v=yv5ZHXAeN00',video:'yv5ZHXAeN00',description:'Phỏng vấn đường phố về cách mọi người làm quen và bắt đầu trò chuyện. Mức học B1–B2 do ứng dụng gợi ý.',tasks:['Nghe 2–3 phút không bật phụ đề: ghi lại bối cảnh và hai ý chính.','Nghe lại có phụ đề: ghi ba cách bắt chuyện mà bạn nhận ra.','Nói 60 giây: Wie lernst du neue Leute kennen?']},
- {id:'easy-life-germany',title:'Trải nghiệm sống và làm việc ở Đức',level:'B1–B2',source:'Easy German · YouTube',url:'https://www.youtube.com/watch?v=OyuXSJ9pG6M',video:'OyuXSJ9pG6M',description:'Người nhập cư chia sẻ trải nghiệm về cuộc sống và công việc tại Đức. Mức học B1–B2 do ứng dụng gợi ý.',tasks:['Nghe một đoạn 2–3 phút và xác định chủ đề chính.','Ghi một lợi ích và một khó khăn được người nói nhắc đến.','Nói 60 giây: Was wäre für dich in Deutschland eine Herausforderung?']},
- {id:'goethe-b1',title:'Goethe B1 · Hören',level:'B1',source:'Goethe-Institut · Đề mẫu chính thức',url:'https://www.goethe.de/de/spr/prf/ueb/pb1.html',video:'',description:'Mở tài liệu chính thức để nghe âm thanh và xem đề mẫu. Tập trung thêm Teil 4 theo nhu cầu ôn của Uyên.',tasks:['Mở phần Hören trên trang Goethe và làm một phần nghe.','So sánh với đáp án chính thức tại nguồn.','Ghi nguyên nhân nghe sai: từ vựng, tốc độ hay diễn đạt tương đương.']},
- {id:'goethe-b2',title:'Goethe B2 · Hören',level:'B2',source:'Goethe-Institut · Đề mẫu chính thức',url:'https://www.goethe.de/ins/de/de/prf/gzb2/ue9.html',video:'',description:'Bài luyện nghe và đề mẫu do Goethe-Institut cung cấp. Audio, đề và đáp án mở tại trang nguồn.',tasks:['Chọn một phần Hören và đọc yêu cầu trước khi nghe.','Làm bài theo hướng dẫn của đề; đối chiếu đáp án ở nguồn.','Tóm tắt bằng 3–5 câu tiếng Đức, dùng một cấu trúc B2.']},
- {id:'sicher-hueber',title:'Sicher! · Tài nguyên giáo trình',level:'B1+–B2',source:'Hueber Verlag · Nguồn giáo trình',url:'https://www.hueber.de/reihe/sicher/lernen',video:'',description:'Cổng tài nguyên chính thức của giáo trình Sicher!. Chọn đúng trình độ và phiên bản sách đang dùng; một số học liệu có thể cần sách hoặc tài khoản của nhà xuất bản.',tasks:['Mở nguồn Hueber và chọn đúng phiên bản, trình độ của sách.','Chọn một bài nghe theo chương đang ôn; làm yêu cầu trong sách.','Đọc lại lời thoại nếu nguồn có cung cấp và ghi năm cụm từ hữu ích.']}
+import { useState } from "react";
+const lessons = [
+  {
+    id: "easy-conversation",
+    title: "Starting a conversation",
+    level: "B1–B2",
+    source: "Easy German",
+    url: "https://www.youtube.com/watch?v=yv5ZHXAeN00",
+    video: "yv5ZHXAeN00",
+    description:
+      "Street interviews about meeting people and starting conversations. Suggested study level: B1–B2.",
+  },
+  {
+    id: "easy-life-germany",
+    title: "Life and work in Germany",
+    level: "B1–B2",
+    source: "Easy German",
+    url: "https://www.youtube.com/watch?v=OyuXSJ9pG6M",
+    video: "OyuXSJ9pG6M",
+    description:
+      "People who moved to Germany share their experiences. Listen for one opportunity and one challenge.",
+  },
+  {
+    id: "goethe-b1",
+    title: "Goethe B1 · listening practice",
+    level: "B1",
+    source: "Goethe-Institut",
+    url: "https://www.goethe.de/de/spr/prf/ueb/pb1.html",
+    video: "",
+    description:
+      "Official exam practice. Open the source for the audio, question booklet and official answers. Revisit Part 4 when needed.",
+  },
+  {
+    id: "goethe-b2",
+    title: "Goethe B2 · listening practice",
+    level: "B2",
+    source: "Goethe-Institut",
+    url: "https://www.goethe.de/ins/de/de/prf/gzb2/ue9.html",
+    video: "",
+    description:
+      "Official B2 sample material. Follow the instructions at the source, then compare with the official answers.",
+  },
+  {
+    id: "sicher-hueber",
+    title: "Sicher! · course resources",
+    level: "B1+–B2",
+    source: "Hueber",
+    url: "https://www.hueber.de/reihe/sicher/lernen",
+    video: "",
+    description:
+      "Publisher resources for Sicher!. Choose the edition and unit matching your own book. Some resources may require access through the publisher.",
+  },
 ];
-export function ListeningLibrary({listened,mark,blocked}:{listened:string[];mark:(id:string,v:boolean)=>void;blocked:boolean}){
- const [current,setCurrent]=useState(listeningLessons[0]),[embed,setEmbed]=useState(false),[filter,setFilter]=useState('Tất cả');
- return <section className="realListening"><div className="sectionTitle"><h2>Nghe tiếng Đức thực tế</h2><select aria-label="Lọc trình độ bài nghe" value={filter} onChange={e=>setFilter(e.target.value)}><option>Tất cả</option><option>B1</option><option>B2</option></select></div><p>Video đời sống, đề nghe và tài nguyên giáo trình. {listened.length}/{listeningLessons.length} nguồn đã luyện.</p><div className="listeningLayout"><div className="listeningChoices">{listeningLessons.filter(l=>filter==='Tất cả'||l.level.includes(filter)).map(l=><button key={l.id} className={'panel listeningChoice '+(l.id===current.id?'isSelected':'')} onClick={()=>{setCurrent(l);setEmbed(false);}}><small>{l.level} · {listened.includes(l.id)?'Đã luyện':'Chưa luyện'}</small><strong>{l.title}</strong><span>{l.source}</span></button>)}</div><article className="panel listeningDetail"><span className="pill">{current.level} · NGUỒN THẬT</span><h2>{current.title}</h2><p>{current.description}</p>{current.video&&(embed?<iframe key={current.id} className="youtubePlayer" src={'https://www.youtube-nocookie.com/embed/'+current.video} title={current.title} loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerPolicy="strict-origin-when-cross-origin" allowFullScreen/>:<div className="videoConsent"><p>Phát video trong trang sẽ kết nối tới YouTube. Bạn cũng có thể mở video trực tiếp tại nguồn.</p><button className="primary" onClick={()=>setEmbed(true)}>Tải trình phát YouTube</button></div>)}<a className="outline sourceLink" href={current.url} target="_blank" rel="noopener noreferrer">Mở tại {current.source.split(' · ')[0]} ↗</a><div className="listenPrompts"><h3>Buổi luyện khoảng 10 phút</h3><ol>{current.tasks.map(t=><li key={t}>{t}</li>)}</ol></div><p className="sourceNote">Nguồn: <a href={current.url} target="_blank" rel="noopener noreferrer">{current.source}</a>. Các bước luyện bên trên do ứng dụng soạn, không phải câu hỏi hoặc đáp án chính thức của nguồn.</p><label className="completionToggle"><input type="checkbox" disabled={blocked} checked={listened.includes(current.id)} onChange={e=>mark(current.id,e.target.checked)}/> Tôi đã hoàn thành buổi luyện với nguồn này</label>{current.video&&<p className="sourceNote">Nếu video không cho nhúng hoặc không phát được, chọn “Mở tại Easy German”.</p>}</article></div><div className="panel sourceNote"><strong>Sách Uyên từng học</strong><p>Chưa nhập sách riêng. Gửi PDF hoặc tên sách, phiên bản và chương muốn ôn để bổ sung đúng nguồn. Nội dung tại đây mở ở trang chính thức; ứng dụng không tải lại audio hay sao chép sách.</p></div></section>;
+export function ListeningLibrary({
+  listened,
+  mark,
+  blocked,
+}: {
+  listened: string[];
+  mark: (id: string, v: boolean) => void;
+  blocked: boolean;
+}) {
+  const [id, setId] = useState(lessons[0].id),
+    [filter, setFilter] = useState("All"),
+    [play, setPlay] = useState(false);
+  const current = lessons.find((x) => x.id === id)!;
+  return (
+    <>
+      <div className="page-heading">
+        <span className="eyebrow">REAL VOICES · REAL CONTEXT</span>
+        <h1>
+          Listen beyond the textbook<span>.</span>
+        </h1>
+        <p>
+          Native-speaker video, official exam practice, and publisher resources.
+        </p>
+      </div>
+      <div className="section-heading">
+        <span>
+          {listened.length} of {lessons.length} sources practiced
+        </span>
+        <select
+          aria-label="Listening level"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        >
+          <option>All</option>
+          <option>B1</option>
+          <option>B2</option>
+        </select>
+      </div>
+      <div className="listening-grid">
+        <div className="source-list">
+          {lessons
+            .filter((l) => filter === "All" || l.level.includes(filter))
+            .map((l) => (
+              <button
+                className={
+                  "card source-card " + (l.id === id ? "selected" : "")
+                }
+                key={l.id}
+                onClick={() => {
+                  setId(l.id);
+                  setPlay(false);
+                }}
+              >
+                <span className="eyebrow">
+                  {l.level} ·{" "}
+                  {listened.includes(l.id) ? "Practiced" : "Explore"}
+                </span>
+                <h3>{l.title}</h3>
+                <small>{l.source}</small>
+              </button>
+            ))}
+        </div>
+        <article className="card source-detail">
+          <span className="pill">
+            {current.level} · {current.source}
+          </span>
+          <h2>{current.title}</h2>
+          <p>{current.description}</p>
+          {current.video &&
+            (play ? (
+              <iframe
+                title={current.title}
+                src={"https://www.youtube-nocookie.com/embed/" + current.video}
+                referrerPolicy="strict-origin-when-cross-origin"
+                allow="encrypted-media; picture-in-picture; fullscreen"
+                allowFullScreen
+              />
+            ) : (
+              <div className="video-prompt">
+                <span className="orb-play">▶</span>
+                <h3>A little listening goes a long way.</h3>
+                <p>
+                  Loading the player connects to YouTube. You can also open the
+                  source directly.
+                </p>
+                <button
+                  className="button primary"
+                  onClick={() => setPlay(true)}
+                >
+                  Load YouTube player
+                </button>
+              </div>
+            ))}
+          <a
+            className="button secondary"
+            href={current.url}
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open {current.source} ↗
+          </a>
+          <div className="practice-steps">
+            <h3>A focused, ten-minute session.</h3>
+            <ol>
+              <li>
+                Listen to a short section without subtitles. Note the situation
+                and two main ideas.
+              </li>
+              <li>
+                Listen again with available captions or the official transcript.
+                Collect three useful expressions.
+              </li>
+              <li>
+                Summarize what you heard in German. For exam tasks, check the
+                official answers at the source.
+              </li>
+            </ol>
+          </div>
+          <label className="check-label">
+            <input
+              type="checkbox"
+              disabled={blocked}
+              checked={listened.includes(id)}
+              onChange={(e) => mark(id, e.target.checked)}
+            />{" "}
+            I practiced with this source.
+          </label>
+          <p className="micro">
+            Study prompts are authored for this app. Source content and official
+            answers remain with their publishers. If embedding is blocked, use
+            the source link.
+          </p>
+        </article>
+      </div>
+    </>
+  );
 }

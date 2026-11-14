@@ -1,78 +1,56 @@
-# Deutsch mit Uyên
+# Deutsch · Your everyday German
 
-Trang học tiếng Đức B1–B2 dành cho Uyên: lộ trình 30 ngày, thẻ từ Đức–Việt, giải thích ngữ pháp, luyện nghe và trắc nghiệm.
+A React + TypeScript learning studio for German B1–B2, published with GitHub Pages.
 
-## Mã nguồn này là gì?
+## Run and verify
 
-Bản xuất từ trang https://deutsch-mit-uyen.encouragingmodel.chatgpt.site, chuẩn bị ngày 13/11/2026.
-Giữ nguyên mã giao diện, dữ liệu bài học và cách lưu tiến độ của phiên bản hiện tại trong `src/App.tsx` và `src/styles.css`. Phần khởi chạy được chuyển từ nền tảng Sites/Vinext sang React + Vite để chạy độc lập và triển khai lên GitHub Pages. Không cần tài khoản ChatGPT hoặc API key để chạy bản này.
+Use Node.js 22.13 or newer.
 
-## Chạy trên máy tính
-
-Cài Node.js 22.13 trở lên (khuyến nghị Node.js 22 LTS), mở terminal trong thư mục có `package.json`:
-
-```bash
+```sh
 npm ci
 npm run dev
-```
-
-Mở địa chỉ do terminal hiển thị. Đừng mở trực tiếp `index.html` bằng cách nhấp đúp; mã TSX cần được biên dịch.
-
-Tạo và xem bản triển khai:
-
-```bash
+npm test
 npm run build
 npm run preview
 ```
 
-Thư mục `dist/` là kết quả build; được tạo lại bằng lệnh trên.
+The GitHub Actions workflow tests, builds and deploys `dist/` after a push to `main`. Enable **Settings → Pages → GitHub Actions** once.
 
-## Đưa lên GitHub
+## Learning experience
 
-1. Giải nén ZIP. Tạo repository mới trên GitHub, ví dụ `deutsch-mit-uyen`.
-2. Đưa toàn bộ nội dung của thư mục này vào thư mục gốc repository: `package.json`, `src/`, `public/`, `index.html`, các tệp cấu hình và cả `.github/`. Không tải nguyên ZIP lên thay cho các tệp nguồn. Có thể dùng GitHub Desktop để thêm repository và Publish repository; hoặc dùng Git như dưới đây.
-3. Nếu dùng Git, tại thư mục đã giải nén, thay URL ví dụ bằng URL repository của bạn:
+- A complete six-word batch with gender, plural, collocations and four bilingual examples per word.
+- Sequential introduction, active production, contextual word identification, and a visual paragraph task.
+- Dictation where the browser supports speech recognition. Written feedback evaluates the transcript, not pronunciation or spoken fluency.
+- An authenticated server-side AI evaluation function, plus explicitly unscored self-review when AI is unavailable.
+- Native listening requires a sourced native-speaker recording containing the target noun. Supply your course recording in the session. Synthetic warm-up audio does not unlock this assessment.
+- A 60–180-word visual task using all six nouns and an idiom.
+- Two original reading/dialogue exercises with a curated dictionary for every token, sentence/passage translations, and grammar insights.
+- A native-video and official-course listening library.
+- The original 30-day topic map and shared five-question foundation quiz remain available. The topic map does not represent 30 distinct lesson sets.
 
-```bash
-git init
-git add .
-git commit -m "Add Deutsch mit Uyen"
-git branch -M main
-git remote add origin https://github.com/TEN_TAI_KHOAN/deutsch-mit-uyen.git
-git push -u origin main
-```
+## Architecture
 
-4. Chỉ lưu mã nguồn thì dừng ở đây. Nếu muốn có trang web trực tuyến, vào repository → **Settings → Pages → Build and deployment → Source → GitHub Actions**.
-5. Vào **Actions → Deploy GitHub Pages → Run workflow**. Những lần push tiếp theo lên nhánh `main` sẽ tự build và triển khai. Sau khi thành công, lấy đường dẫn web trong **Settings → Pages**.
+- `src/content/course.ts`: typed vocabulary, original passages, examples, and idioms.
+- `src/content/dictionary.ts`: curated contextual definitions and tokenization.
+- `src/features/Vocabulary.tsx`: sequential learning interface.
+- `src/features/batchState.ts`: persisted-state and feedback validation.
+- `src/features/useBatch.ts`: account-scoped draft storage and optional cloud sync.
+- `src/features/Reading.tsx`: reusable interactive reading renderer.
+- `src/features/Speech.tsx`: optional browser speech tools with typed-input fallback.
+- `src/features/evaluation.ts`: authenticated client adapter; no provider keys in the browser.
+- `supabase/functions/evaluate-german/index.ts`: validated, authenticated AI feedback with a per-user daily quota.
+- `src/styles.css`: responsive design tokens, rose/plum palette, accessible focus styles, and reduced-motion support.
 
-Nguồn hướng dẫn GitHub: https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site
+## Connected services and current limitations
 
-`base: './'` đã được thiết lập để hỗ trợ đường dẫn repository trên GitHub Pages. Workflow trong `.github/workflows/deploy.yml` build bằng Node.js 22 và dùng `package-lock.json` để cố định các phụ thuộc.
+Google login, database sync, and AI scoring require configuration. They are not activated merely by publishing the frontend. See [SETUP_SUPABASE.md](SETUP_SUPABASE.md).
 
-## Chỉnh sửa nội dung
+The app does not invent AI scores or label device speech as a native recording. Self-review completion is explicitly unscored. Audio files are local to the browser session. Native media must be supplied before the word-identification step can be completed.
 
-- `src/App.tsx`: giao diện React, danh sách 30 chủ đề (`topics`), từ vựng (`words`), câu hỏi (`questions`), tương tác và giọng đọc.
-- `src/styles.css`: màu sắc, kiểu chữ, bố cục và hiển thị điện thoại.
-- `src/main.tsx`: điểm khởi chạy React.
-- `index.html`: tiêu đề, mô tả, ngôn ngữ trang.
-- `public/favicon.svg`: biểu tượng trang.
-- `.github/workflows/deploy.yml`: tự động triển khai GitHub Pages.
+Batch drafts are isolated by account and cached locally. Failed cloud writes remain pending. A cloud snapshot is loaded when the account is opened; there is no real-time collaboration. When two devices edit the same batch, the last successful cloud write wins. Guest batch drafts are not automatically copied into an account.
 
-## Tài khoản, tiến độ và bài nghe (bản nâng cấp)
+The reference images provided by the project owner inform the palette. Two supplied images are included as the hero asset and visual task; no additional rights to redistribute them are asserted. Original reading passages, grammar notes and examples were authored for this application.
 
-- Thư viện nghe: hai video Easy German nhúng theo yêu cầu, nguồn Goethe B1/B2 và tài nguyên giáo trình Sicher! của Hueber, kèm các bước tự luyện và đánh dấu hoàn thành.
-- Chế độ khách lưu trên thiết bị, tiếp nhận tiến độ cũ của bản đầu tiên.
-- Mã đăng nhập Google qua Supabase, lưu ngày học, từ vựng, bài nghe và lịch sử kiểm tra theo từng tài khoản; hàng đợi gửi lại khi có mạng.
-- **Đăng nhập và dữ liệu trực tuyến chưa được kích hoạt** nếu chưa có dự án Supabase và cấu hình Google. Xem [SETUP_SUPABASE.md](SETUP_SUPABASE.md) để triển khai thật.
-- Schema và chính sách dữ liệu riêng từng người học: `supabase/schema.sql`.
-- Không dùng khóa secret/service_role trong trình duyệt. Publishable key phải đi cùng RLS.
-- Danh mục nguồn: `src/ListeningLibrary.tsx`. Không tải lại video, sao chép sách hoặc transcript. Các bước luyện do ứng dụng soạn; đối chiếu đáp án chính thức tại nguồn.
-- Chưa nhập sách riêng của Uyên. Cần PDF/tên sách, phiên bản và chương để bổ sung.
-- 30 chủ đề vẫn là khung lộ trình với bộ ngữ pháp/từ vựng nhỏ, chưa phải 30 giáo án hoàn chỉnh.
-- Bài Anna giữ lại dưới nhãn giọng tổng hợp do AI soạn, tách khỏi thư viện nguồn thực tế.
+## Verification
 
-## Kiểm tra
-
-`npm test`: kiểm tra lọc dữ liệu tiến độ lỗi, chuyển dữ liệu cũ, bỏ đánh dấu và bản ghi kết quả kiểm tra.
-`npm run build`: kiểm tra TypeScript và build Vite.
-Chưa kiểm thử đăng nhập Google, RLS hoặc đồng bộ với backend thật trước khi cấu hình Supabase.
+Tests cover legacy migration, malformed records, false-valued progress, quiz attempts, dictionary coverage, vocabulary completeness, target matching, sequential gates, and feedback bounds. Frontend builds are verified separately. Live OAuth, cloud RLS, and the AI provider require deployment credentials and end-to-end verification after setup.
