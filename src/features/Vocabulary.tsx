@@ -1,3 +1,4 @@
+import { GermanText } from "./dictionary/Dictionary";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Check, Lock, RotateCcw } from "lucide-react";
 import {
@@ -25,7 +26,9 @@ function FeedbackView({ feedback }: { feedback: Feedback }) {
         <strong>Grammar {feedback.grammar}/5</strong>
         <strong>Naturalness {feedback.naturalness}/5</strong>
       </div>
-      <p lang="de">{feedback.corrected}</p>
+      <p lang="de">
+        <GermanText text={feedback.corrected} />
+      </p>
       <ul>
         {feedback.notes.map((n, i) => (
           <li key={i}>{n}</li>
@@ -314,14 +317,16 @@ export default function Vocabulary({
               <div className="chips">
                 {w.collocations.map((c) => (
                   <span key={c} lang="de">
-                    {c}
+                    <GermanText text={c} />
                   </span>
                 ))}
               </div>
               <div className="example-list">
                 {w.examples.map((ex) => (
                   <div key={ex.de}>
-                    <p lang="de">{ex.de}</p>
+                    <p lang="de">
+                      <GermanText text={ex.de} />
+                    </p>
                     <small>{ex.en}</small>
                   </div>
                 ))}
@@ -346,7 +351,9 @@ export default function Vocabulary({
               <ListenButton text={w.scenario} />
               <details className="prompt-transcript">
                 <summary>Read the German scenario</summary>
-                <p lang="de">{w.scenario}</p>
+                <p lang="de">
+                  <GermanText text={w.scenario} />
+                </p>
               </details>
               <label className="field-label">
                 Your German sentence
@@ -442,7 +449,11 @@ export default function Vocabulary({
                 >
                   Toggle clue transcript
                 </button>
-                {showClue && <p lang="de">{w.clue}</p>}
+                {showClue && (
+                  <p lang="de">
+                    <GermanText text={w.clue} />
+                  </p>
+                )}
               </details>
               <label className="field-label">
                 Which noun fits?

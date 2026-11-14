@@ -25,6 +25,7 @@ jobs:
       - run: npm test
       - run: npm run build
         env:
+          VITE_BUILD_SHA: ${{ github.sha }}
           VITE_TTS_ENDPOINT: ${{ vars.VITE_TTS_ENDPOINT }}
           VITE_TTS_VOICE: ${{ vars.VITE_TTS_VOICE }}
           VITE_AI_FEEDBACK_ENABLED: ${{ vars.VITE_AI_FEEDBACK_ENABLED }}
@@ -38,6 +39,11 @@ jobs:
           path: dist
   deploy:
     if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+      pull-requests: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -47,3 +53,29 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+
+      - name: Add verified deployment link to merged PR descriptions
+        uses: actions/github-script@v7
+        env:
+          PAGE_URL: ${{ steps.deployment.outputs.page_url }}
+        with:
+          script: |
+            const url = process.env.PAGE_URL;
+            if (!url || !url.startsWith('https://')) throw new Error('Missing Pages deployment URL');
+            const live = `${url}?v=${context.sha.slice(0, 7)}`;
+            const block = `<!-- latest-deployment:start -->
+            ## Latest deployed app
+            [Test the latest version](${live})
+
+            Deployed commit: \`${context.sha}\`. This link opens the current production app, which advances with future releases.
+            <!-- latest-deployment:end -->`;
+            const { data: prs } = await github.rest.repos.listPullRequestsAssociatedWithCommit({ ...context.repo, commit_sha: context.sha });
+            for (const pr of prs.filter(p => p.merged_at && p.base.ref === 'main')) {
+              const { data: current } = await github.rest.pulls.get({ ...context.repo, pull_number: pr.number });
+              const body = current.body || '';
+              const section = /<!-- latest-deployment:start -->[\s\S]*?<!-- latest-deployment:end -->/;
+              await github.rest.pulls.update({ ...context.repo, pull_number: pr.number, body: section.test(body) ? body.replace(section, () => block) : `${block}
+
+            ${body}` });
+            }
+            await core.summary.addHeading('Latest deployed app').addLink('Open live app', live).addRaw(`\n\nCommit: ${context.sha}`).write();

@@ -1,3 +1,4 @@
+import { GermanText } from "../dictionary/Dictionary";
 import { useState } from "react";
 import { useStudio } from "./StudioProgress";
 import { vocabulary } from "../../content/course";
@@ -36,7 +37,9 @@ export default function Review() {
             <h2 lang="de">
               {word.article} {word.word}
             </h2>
-            <p lang="de">{word.examples[0].de}</p>
+            <p lang="de">
+              <GermanText text={word.examples[0].de} />
+            </p>
             <ListenButton
               text={`${word.article} ${word.word}. ${word.examples[0].de}`}
               label="Hear review word"
