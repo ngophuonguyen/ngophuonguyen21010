@@ -58,14 +58,21 @@ Nguồn hướng dẫn GitHub: https://docs.github.com/en/pages/getting-started-
 - `public/favicon.svg`: biểu tượng trang.
 - `.github/workflows/deploy.yml`: tự động triển khai GitHub Pages.
 
-## Dữ liệu và giới hạn hiện tại
+## Tài khoản, tiến độ và bài nghe (bản nâng cấp)
 
-- Tiến độ lưu trong localStorage của trình duyệt (`uyen-days`, `uyen-words`). Bản mã nguồn không chứa tiến độ riêng của Uyên. Khi đổi tên miền, thiết bị hoặc trình duyệt, dữ liệu cũ không tự chuyển sang.
-- Phần nghe dùng Web Speech API và giọng đọc tiếng Đức có trên thiết bị; chất lượng và tính khả dụng tùy trình duyệt/hệ điều hành.
-- 30 chủ đề là khung lộ trình. Bộ từ vựng và câu hỏi còn nhỏ, có nội dung dùng lại; chưa phải 30 giáo án hoàn chỉnh riêng biệt.
-- Nội dung do AI soạn, chưa tích hợp sách/file từ vựng riêng và chưa có đồng bộ tài liệu tự động.
-- Không có backend, đăng nhập, dữ liệu đám mây hoặc dịch vụ AI chạy trong ứng dụng.
+- Thư viện nghe: hai video Easy German nhúng theo yêu cầu, nguồn Goethe B1/B2 và tài nguyên giáo trình Sicher! của Hueber, kèm các bước tự luyện và đánh dấu hoàn thành.
+- Chế độ khách lưu trên thiết bị, tiếp nhận tiến độ cũ của bản đầu tiên.
+- Mã đăng nhập Google qua Supabase, lưu ngày học, từ vựng, bài nghe và lịch sử kiểm tra theo từng tài khoản; hàng đợi gửi lại khi có mạng.
+- **Đăng nhập và dữ liệu trực tuyến chưa được kích hoạt** nếu chưa có dự án Supabase và cấu hình Google. Xem [SETUP_SUPABASE.md](SETUP_SUPABASE.md) để triển khai thật.
+- Schema và chính sách dữ liệu riêng từng người học: `supabase/schema.sql`.
+- Không dùng khóa secret/service_role trong trình duyệt. Publishable key phải đi cùng RLS.
+- Danh mục nguồn: `src/ListeningLibrary.tsx`. Không tải lại video, sao chép sách hoặc transcript. Các bước luyện do ứng dụng soạn; đối chiếu đáp án chính thức tại nguồn.
+- Chưa nhập sách riêng của Uyên. Cần PDF/tên sách, phiên bản và chương để bổ sung.
+- 30 chủ đề vẫn là khung lộ trình với bộ ngữ pháp/từ vựng nhỏ, chưa phải 30 giáo án hoàn chỉnh.
+- Bài Anna giữ lại dưới nhãn giọng tổng hợp do AI soạn, tách khỏi thư viện nguồn thực tế.
 
 ## Kiểm tra
 
-Bản xuất được kiểm tra bằng `npm run build` (TypeScript và Vite). Đối chiếu mã `src/App.tsx` và `src/styles.css` với phiên bản gốc để giữ nguyên nội dung. Việc triển khai GitHub Pages chỉ chạy khi bạn đưa repository lên GitHub và bật Pages.
+`npm test`: kiểm tra lọc dữ liệu tiến độ lỗi, chuyển dữ liệu cũ, bỏ đánh dấu và bản ghi kết quả kiểm tra.
+`npm run build`: kiểm tra TypeScript và build Vite.
+Chưa kiểm thử đăng nhập Google, RLS hoặc đồng bộ với backend thật trước khi cấu hình Supabase.
