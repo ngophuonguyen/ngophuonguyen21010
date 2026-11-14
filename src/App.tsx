@@ -11,9 +11,16 @@ import {
   Clock3,
   Check,
   Globe2,
+  Trophy,
+  RotateCcw,
 } from "lucide-react";
 import { useLearning } from "./useLearning";
 import { AccountPanel } from "./AccountPanel";
+import BrandLogo from "./features/BrandLogo";
+import { StudioProvider } from "./features/studio/StudioProgress";
+import Leaderboard, { RankCard } from "./features/studio/Leaderboard";
+const ListeningStudio = lazy(() => import("./features/studio/ListeningStudio"));
+const Review = lazy(() => import("./features/studio/Review"));
 const Vocabulary = lazy(() => import("./features/Vocabulary"));
 const Reading = lazy(() => import("./features/Reading"));
 const Listening = lazy(() =>
@@ -24,9 +31,11 @@ const nav = [
   { id: "home", label: "Overview", icon: LayoutDashboard },
   { id: "vocabulary", label: "Vocabulary studio", icon: Layers },
   { id: "reading", label: "Reading & dialogue", icon: BookOpen },
-  { id: "listening", label: "Listening library", icon: Headphones },
+  { id: "listening", label: "Listening studio", icon: Headphones },
   { id: "grammar", label: "Grammar practice", icon: Sparkles },
   { id: "plan", label: "Learning plan", icon: Route },
+  { id: "review", label: "Spaced review", icon: RotateCcw },
+  { id: "leaderboard", label: "Practice ranks", icon: Trophy },
 ];
 const topics = [
   "Reconnect with German",
@@ -62,9 +71,23 @@ const topics = [
 ];
 export default function App() {
   const l = useLearning();
+  return (
+    <StudioProvider key={l.user?.id ?? "guest"} scope={l.user?.id ?? "guest"}>
+      <Workspace learning={l} />
+    </StudioProvider>
+  );
+}
+function Workspace({
+  learning: l,
+}: {
+  learning: ReturnType<typeof useLearning>;
+}) {
   const [page, setPage] = useState("home"),
     [day, setDay] = useState(1);
-  const label = nav.find((n) => n.id === page)?.label ?? "Overview";
+  const label =
+    page === "resources"
+      ? "Listening resources"
+      : (nav.find((n) => n.id === page)?.label ?? "Overview");
   function complete(score: number) {
     l.recordAttempt(day, score, 5);
     if (score >= 3) l.setDone((old) => [...new Set([...old, day])]);
@@ -83,19 +106,18 @@ export default function App() {
             setPage("home");
           }}
         >
-          <span className="brand-mark">
-            d<span>:</span>
-          </span>
-          <div>
-            deutsch<span className="brand-caption">YOUR EVERYDAY GERMAN</span>
-          </div>
+          <BrandLogo />
         </a>
         <span className="nav-caption">YOUR LEARNING SPACE</span>
         <nav aria-label="Main navigation">
           {nav.map((n) => (
             <button
               key={n.id}
-              className={page === n.id ? "active" : ""}
+              className={
+                page === n.id || (page === "resources" && n.id === "listening")
+                  ? "active"
+                  : ""
+              }
               onClick={() => setPage(n.id)}
             >
               <n.icon size={19} />
@@ -125,6 +147,9 @@ export default function App() {
       </aside>
       <div className="workspace">
         <header className="topbar">
+          <span className="mobile-brand">
+            <BrandLogo />
+          </span>
           <div>
             <Globe2 size={15} />
             <span>Your space</span>
@@ -233,6 +258,32 @@ export default function App() {
                       </div>
                     </div>
                   </section>
+                  <div className="merge-feature-row">
+                    <RankCard onReview={() => setPage("review")} />
+                    <section className="card merge-feature-intro">
+                      <span className="eyebrow">
+                        LISTEN DEEPER. REMEMBER LONGER.
+                      </span>
+                      <h2>One story. Three ways to hear it.</h2>
+                      <p>
+                        Listen without the transcript, follow the German, then
+                        connect it to English. Your study notes and completed
+                        passes stay on this device.
+                      </p>
+                      <button
+                        className="button primary"
+                        onClick={() => setPage("listening")}
+                      >
+                        Open three-pass listening <ArrowRight size={16} />
+                      </button>
+                      <button
+                        className="button subtle"
+                        onClick={() => setPage("leaderboard")}
+                      >
+                        Explore practice ranks <Trophy size={16} />
+                      </button>
+                    </section>
+                  </div>
                   <div className="dashboard-grid">
                     <section className="card">
                       <div className="section-heading">
@@ -320,13 +371,20 @@ export default function App() {
                 />
               )}{" "}
               {page === "reading" && <Reading />}
-              {page === "listening" && (
+              {page === "resources" && (
                 <Listening
                   listened={l.listened}
                   mark={l.markListening}
                   blocked={l.blocked}
                 />
               )}{" "}
+              {page === "listening" && (
+                <ListeningStudio onResources={() => setPage("resources")} />
+              )}
+              {page === "leaderboard" && (
+                <Leaderboard onReview={() => setPage("review")} />
+              )}
+              {page === "review" && <Review />}
               {page === "grammar" && (
                 <Grammar
                   key={`${day}:${l.user?.id ?? "guest"}`}

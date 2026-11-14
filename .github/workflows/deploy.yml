@@ -2,13 +2,15 @@ name: Deploy GitHub Pages
 on:
   push:
     branches: [main]
+  pull_request:
+    branches: [main]
   workflow_dispatch:
 permissions:
   contents: read
   pages: write
   id-token: write
 concurrency:
-  group: pages
+  group: pages-${{ github.ref }}
   cancel-in-progress: true
 jobs:
   build:
@@ -23,14 +25,19 @@ jobs:
       - run: npm test
       - run: npm run build
         env:
+          VITE_TTS_ENDPOINT: ${{ vars.VITE_TTS_ENDPOINT }}
+          VITE_TTS_VOICE: ${{ vars.VITE_TTS_VOICE }}
           VITE_AI_FEEDBACK_ENABLED: ${{ vars.VITE_AI_FEEDBACK_ENABLED }}
           VITE_SUPABASE_URL: ${{ vars.VITE_SUPABASE_URL }}
           VITE_SUPABASE_PUBLISHABLE_KEY: ${{ vars.VITE_SUPABASE_PUBLISHABLE_KEY }}
       - uses: actions/configure-pages@v5
+        if: github.event_name != 'pull_request'
       - uses: actions/upload-pages-artifact@v3
+        if: github.event_name != 'pull_request'
         with:
           path: dist
   deploy:
+    if: github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
