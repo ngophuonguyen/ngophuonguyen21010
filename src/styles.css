@@ -2537,3 +2537,13 @@ footer > span {
     font-size: 15px;
   }
 }
+
+@media (max-width: 520px) {
+  .dictionary-launch span {
+    display: none;
+  }
+  .dictionary-launch {
+    min-width: 36px;
+    justify-content: center;
+  }
+}

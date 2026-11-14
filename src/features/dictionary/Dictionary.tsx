@@ -49,6 +49,7 @@ export function DictionaryButton() {
   return (
     <button
       className="button subtle dictionary-launch"
+      aria-label="Dictionary"
       onClick={() => open?.("")}
     >
       <Search size={17} />
