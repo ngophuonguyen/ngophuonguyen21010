@@ -50,7 +50,7 @@ export default function Grammar({
   return (
     <>
       <div className="page-heading">
-        <span className="eyebrow">STRUCTURE LAB · DAY {day}</span>
+        <span className="eyebrow">STRUCTURE LAB · FOUNDATION PRACTICE</span>
         <h1>
           A little structure. More freedom<span>.</span>
         </h1>
@@ -68,8 +68,8 @@ export default function Grammar({
             </h2>
             <p>
               {score >= 3
-                ? "Your learning day has been recorded. Keep building on it."
-                : "Review the explanations and try again. The day is recorded after at least three correct answers."}
+                ? "Your foundation practice attempt has been recorded."
+                : "Review the explanations and try again. This foundation quiz does not complete a curriculum day."}
             </p>
             <button
               className="button primary"

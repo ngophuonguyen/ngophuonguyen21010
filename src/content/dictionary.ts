@@ -97,4 +97,7 @@ export const dictionary: Record<string, Entry> = Object.fromEntries(
   }),
 );
 export const tokens = (s: string) => s.split(/(\p{L}+(?:[-’']\p{L}+)*)/gu);
-export const lookup = (s: string) => dictionary[s.toLocaleLowerCase("de-DE")];
+export const lookup = (s: string) => {
+  const key = s.toLocaleLowerCase("de-DE");
+  return Object.hasOwn(dictionary, key) ? dictionary[key] : undefined;
+};

@@ -10,11 +10,13 @@
     "dev": "vite",
     "build": "tsc --noEmit && vite build && node scripts/write-build.mjs",
     "preview": "vite preview",
-    "test": "node --experimental-strip-types --test tests/*.test.ts"
+    "test": "node --experimental-strip-types --test tests/*.test.ts",
+    "audit:curriculum": "node --experimental-strip-types scripts/audit-curriculum.ts"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.119.0",
     "lucide-react": "^1.31.0",
+    "pdfjs-dist": "^6.5.438",
     "react": "19.2.6",
     "react-dom": "19.2.6"
   },
@@ -23,6 +25,7 @@
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
     "@vitejs/plugin-react": "6.0.2",
+    "fake-indexeddb": "^6.2.8",
     "postcss": "^8.5.6",
     "tailwindcss": "4.2.1",
     "typescript": "5.9.3",

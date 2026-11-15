@@ -1,3 +1,4 @@
+import { lessons } from "../../content/curriculum/index.ts";
 import { lookup, type Entry } from "../../content/dictionary.ts";
 import { vocabulary } from "../../content/course.ts";
 export type Sense = {
@@ -65,9 +66,31 @@ const extra: Record<string, Entry> = {
     note: "Ich habe mich für diesen Weg entschieden.",
   },
 };
+const dailyLexicon = new Map(
+  lessons.flatMap((l) =>
+    l.vocabulary.flatMap((v) => {
+      const entry = {
+        lemma: v.term,
+        meaning: v.meaning,
+        grammar: v.grammar,
+        note: `${v.example} — ${v.translation}`,
+      };
+      return [
+        [v.term.toLocaleLowerCase("de-DE"), entry],
+        [
+          v.term.replace(/^(der|die|das) /, "").toLocaleLowerCase("de-DE"),
+          entry,
+        ],
+      ] as [string, Entry][];
+    }),
+  ),
+);
 export function localEntry(term: string): Entry | undefined {
   const k = term.toLocaleLowerCase("de-DE");
-  const direct = lookup(k) ?? extra[k];
+  const direct =
+    lookup(k) ??
+    dailyLexicon.get(k) ??
+    (Object.hasOwn(extra, k) ? extra[k] : undefined);
   if (direct) return direct;
   const w = vocabulary.find((w) =>
     [w.word, ...w.forms, w.plural.replace(/^die /, "")].some(
