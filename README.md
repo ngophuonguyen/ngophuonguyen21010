@@ -28,7 +28,7 @@ The GitHub Actions workflow tests, builds and deploys `dist/` after a push to `m
 - A 60–180-word visual task using all six nouns and an idiom.
 - Two original reading/dialogue exercises with a curated dictionary for every token, sentence/passage translations, and grammar insights.
 - A native-video and official-course listening library.
-- The original 30-day topic map and shared five-question foundation quiz remain available. The topic map does not represent 30 distinct lesson sets.
+- Thirty authored 30-minute lessons now have independent vocabulary, grammar, reading, listening, speaking, writing and explained checks. The legacy foundation quiz remains separate.
 
 ## Architecture
 
@@ -116,3 +116,29 @@ The supplied update contains only Part 1 of 4. Its Berlin teaching passage is in
 ## Latest-version links on every release
 
 The PR template starts with the permanent live-app link. The Pages workflow updates the associated merged PR description with its verified deployment URL and commit only after deployment succeeds. README always links to the latest production build; a PR awaiting merge still points to the existing production version. The footer identifies the build, and `_build.json` publishes its full commit and build time for verification. Source changes reach the live link after main's Pages deployment completes.
+
+## Books and exam practice
+
+The Books & exam practice section catalogs the supplied Goethe adult/youth B1 practice sets (49 PDF pages each) and Klett Hellas teacher guide (76 PDF pages). Edition-specific page guides distinguish study tasks from answer keys, rubrics, and transcripts. The Klett document is a teacher guide for ten model tests; it does not replace the companion test book or audio. Links lead to official publisher resources, whose current editions may differ.
+
+Open your own PDF (up to 25 MB and 600 pages) to render one page at a time with PDF.js and click words in its extracted text using the shared dictionary. SHA-256 matching identifies the exact supplied copies; unverified editions display a page-guide warning. Pages, notes (up to 6,000 characters), and personal checklists are saved by guest/account on the device. PDF bytes and extracted text are now retained in the reusable IndexedDB library and can be reopened after reload. Book progress is not cloud-synced and does not grant XP or official exam scores.
+
+The public repository contains resource metadata, original study guidance, original transfer prompts, and the reader code. It does not contain the supplied PDF files, textbook answer keys/transcripts, or publisher audio. Original pages are only rendered from a file the learner selects locally. No PDF JavaScript or XFA is executed; no PDF is uploaded to a provider. Clicking a word uses the existing dictionary policy (only the term may be sent online). Multi-column text order can differ; scanned pages without selectable text require separate OCR. A PDF alone does not supply native audio or timed captions for the listening studio.
+
+## Independent 30-day curriculum
+
+The original defect was in `App.tsx`: thirty topic buttons changed `day` but all opened `Grammar.tsx`, whose single five-question `quiz` array was reused. A passing foundation quiz also set that day’s completion flag. The learning-plan route now opens the specific record from `src/content/curriculum/`, never the foundation quiz.
+
+The dataset contains 30 authored lessons, 120 vocabulary entries with grammatical notes and bilingual examples, 30 original readings, 30 original listening scripts, 30 speaking tasks, 30 writing tasks and 90 explained questions. Each day budgets 4/4/6/5/4/5/2 minutes respectively, totalling 30. Vocabulary revisits are intentional; lesson bodies and assessment sets are independent. These short B1–B2 refresher lessons do not establish exam proficiency.
+
+Listening scripts use the existing synthetic playback service/device voice when configured and available. A publisher source offers optional native listening; it is not presented as the recording of the authored script. Speaking/listening checks are self-recorded, not a pronunciation assessment or enforced audio proctoring.
+
+`npm run audit:curriculum` validates all 30 real records, checks missing fields, answer indices, unique identities, minimum reading/listening lengths and pairwise four-word-shingle similarity (>0.72) in key bodies. Exact grammar examples and whole quizzes are checked too. It catches cosmetic title changes over cloned bodies. The report includes per-day revisions and counts. Similarity checks are safeguards, not a semantic guarantee.
+
+Completion needs all seven section acknowledgements, a 12+ word speaking outline, a 40+ word written response, all three questions checked, at least two correct answers and a successful full-dataset audit. Drafts and completion are keyed to the lesson-content revision; changed data cannot inherit a stale complete flag. Older foundation marks remain stored but no longer count as completed curriculum days. New daily drafts are account-scoped device data and do not yet sync to Supabase.
+
+## Persistent PDF materials
+
+The Books section now imports B1/B2 PDFs into IndexedDB, including file bytes and extracted per-page text, for reuse after reload. Metadata, topic/grammar/skill keyword candidates, and vocabulary candidates are indexed. Classification is rule-based and explicitly labeled; it is not an AI interpretation or automatic CEFR level test. The user selects B1/B2/Mixed. Original rule-based transfer tasks use detected patterns and selected vocabulary candidates without copying book passages or replacing authored days.
+
+A SHA-256 identity plus account scope makes import additive and idempotent. Duplicate imports return the previous record; new books create separate records. Extraction completes before the atomic save, so cancellation never commits a partial new document. Limits: 25 MB, 600 pages, 30,000 characters per page and 8 MB total extracted text. Pages without text are counted; OCR is not included. Quota/storage failures are visible and preserve previous materials. Saved PDFs are private to the browser device, not a cloud backup; clearing browser site data removes them. No copyrighted PDF files or extracted passages are committed to this public repository.

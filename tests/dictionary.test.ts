@@ -97,3 +97,8 @@ test("online lookup retries noun capitalization and caches German senses", async
     globalThis.fetch = old;
   }
 });
+
+test("daily lesson vocabulary has an instant curated lookup and inherited keys are not entries", () => {
+  assert.equal(localEntry("einhalten")?.meaning, "to keep; comply with");
+  assert.equal(localEntry("constructor"), undefined);
+});

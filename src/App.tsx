@@ -23,6 +23,13 @@ import {
 import BrandLogo from "./features/BrandLogo";
 import { StudioProvider } from "./features/studio/StudioProgress";
 import Leaderboard, { RankCard } from "./features/studio/Leaderboard";
+import {
+  CurriculumProvider,
+  useCurriculum,
+} from "./features/curriculum/CurriculumProgress";
+import { CurriculumPlan } from "./features/curriculum/CurriculumPlan";
+const DailyLesson = lazy(() => import("./features/curriculum/Curriculum"));
+const Books = lazy(() => import("./features/books/Books"));
 const ListeningStudio = lazy(() => import("./features/studio/ListeningStudio"));
 const Review = lazy(() => import("./features/studio/Review"));
 const Vocabulary = lazy(() => import("./features/Vocabulary"));
@@ -34,6 +41,7 @@ const Grammar = lazy(() => import("./features/Grammar"));
 const nav = [
   { id: "home", label: "Overview", icon: LayoutDashboard },
   { id: "vocabulary", label: "Vocabulary studio", icon: Layers },
+  { id: "books", label: "Books & exam practice", icon: BookOpen },
   { id: "reading", label: "Reading & dialogue", icon: BookOpen },
   { id: "listening", label: "Listening studio", icon: Headphones },
   { id: "grammar", label: "Grammar practice", icon: Sparkles },
@@ -41,44 +49,14 @@ const nav = [
   { id: "review", label: "Spaced review", icon: RotateCcw },
   { id: "leaderboard", label: "Practice ranks", icon: Trophy },
 ];
-const topics = [
-  "Reconnect with German",
-  "Perfect & past tense",
-  "Verbs and prepositions",
-  "Reasons and contrasts",
-  "Relative clauses",
-  "Review the foundations",
-  "Weekly reflection",
-  "Hypothetical situations",
-  "Polite suggestions",
-  "Pronominal adverbs",
-  "Sowohl … als auch",
-  "Zwar … aber",
-  "Je … desto",
-  "Connect your ideas",
-  "Present passive",
-  "Past passive",
-  "Noun–verb combinations",
-  "Work and daily life",
-  "Environment",
-  "Health and exercise",
-  "Weekly reflection",
-  "Express your opinion",
-  "Compare alternatives",
-  "Support your argument",
-  "Formal email",
-  "Tell a story",
-  "Listen and summarize",
-  "Speak spontaneously",
-  "Put it together",
-  "Reflect and continue",
-];
 export default function App() {
   const l = useLearning();
   return (
     <StudioProvider key={l.user?.id ?? "guest"} scope={l.user?.id ?? "guest"}>
       <DictionaryProvider>
-        <Workspace learning={l} />
+        <CurriculumProvider scope={l.user?.id ?? "guest"}>
+          <Workspace learning={l} />
+        </CurriculumProvider>
       </DictionaryProvider>
     </StudioProvider>
   );
@@ -88,15 +66,24 @@ function Workspace({
 }: {
   learning: ReturnType<typeof useLearning>;
 }) {
+  const daily = useCurriculum();
+  const openDay = (n: number) => {
+    if (n >= 1 && n <= 30) {
+      setDay(n);
+      setPage("day");
+      window.scrollTo({ top: 0, behavior: "instant" });
+    }
+  };
   const [page, setPage] = useState("home"),
     [day, setDay] = useState(1);
   const label =
-    page === "resources"
-      ? "Listening resources"
-      : (nav.find((n) => n.id === page)?.label ?? "Overview");
+    page === "day"
+      ? "Daily lesson"
+      : page === "resources"
+        ? "Listening resources"
+        : (nav.find((n) => n.id === page)?.label ?? "Overview");
   function complete(score: number) {
     l.recordAttempt(day, score, 5);
-    if (score >= 3) l.setDone((old) => [...new Set([...old, day])]);
   }
   return (
     <div className="app-shell">
@@ -231,14 +218,14 @@ function Workspace({
                       <div>
                         <small>Learning days</small>
                         <strong>
-                          {l.done.length}
+                          {daily.completed.length}
                           <em> / 30</em>
                         </strong>
                       </div>
                       <span
                         className="mini-progress"
                         style={{
-                          background: `conic-gradient(var(--accent) ${(l.done.length / 30) * 360}deg, var(--border) 0deg)`,
+                          background: `conic-gradient(var(--accent) ${(daily.completed.length / 30) * 360}deg, var(--border) 0deg)`,
                         }}
                       />
                     </div>
@@ -377,6 +364,13 @@ function Workspace({
                   authLoading={l.loading}
                 />
               )}{" "}
+              {page === "books" && (
+                <Books
+                  key={l.user?.id ?? "guest"}
+                  scope={l.user?.id ?? "guest"}
+                  onListening={() => setPage("listening")}
+                />
+              )}
               {page === "reading" && <Reading />}
               {page === "resources" && (
                 <Listening
@@ -399,48 +393,14 @@ function Workspace({
                   onComplete={complete}
                 />
               )}{" "}
-              {page === "plan" && (
-                <>
-                  <div className="page-heading">
-                    <span className="eyebrow">
-                      SMALL STEPS · A CLEAR DIRECTION
-                    </span>
-                    <h1>
-                      Build your learning rhythm<span>.</span>
-                    </h1>
-                    <p>
-                      A 30-day topic map. Each day opens the shared foundation
-                      quiz; the studios provide deeper contextual practice.
-                    </p>
-                  </div>
-                  <div className="plan-grid">
-                    {topics.map((t, i) => (
-                      <button
-                        key={t + i}
-                        className="card day-card"
-                        onClick={() => {
-                          setDay(i + 1);
-                          setPage("grammar");
-                        }}
-                      >
-                        <span className="eyebrow">
-                          DAY {String(i + 1).padStart(2, "0")}
-                          {l.done.includes(i + 1) ? (
-                            <Check size={17} />
-                          ) : (
-                            <ArrowUpRight size={17} />
-                          )}
-                        </span>
-                        <h3>{t}</h3>
-                        <small>
-                          {l.done.includes(i + 1)
-                            ? "Completed"
-                            : "Open foundation practice"}
-                        </small>
-                      </button>
-                    ))}
-                  </div>
-                </>
+              {page === "plan" && <CurriculumPlan onOpen={openDay} />}
+              {page === "day" && (
+                <DailyLesson
+                  key={`${l.user?.id ?? "guest"}-${day}`}
+                  day={day}
+                  onOpen={openDay}
+                  onPlan={() => setPage("plan")}
+                />
               )}
             </div>
           </Suspense>
