@@ -2893,3 +2893,20 @@ footer > span {
     padding: 16px;
   }
 }
+
+/* The course is the primary journey; independent studios live behind one hub. */
+.journey-context { display:flex; flex-wrap:wrap; align-items:center; gap:1rem; margin-bottom:1.25rem; color:var(--muted); font-size:.9rem; }
+.journey-outline { margin:1.5rem 0; }
+.journey-outline ol { display:grid; grid-template-columns:repeat(auto-fit,minmax(135px,1fr)); gap:.7rem; padding:0; list-style:none; margin:1.25rem 0; }
+.journey-outline li { border:1px solid var(--border); border-radius:12px; padding:1rem; display:flex; flex-direction:column; gap:.5rem; }
+.journey-outline li span { color:var(--muted); }
+.library-start { margin-bottom:1.5rem; }
+.library-start select { width:100%; }
+.library-steps { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:1.25rem; padding-left:1.5rem; }
+.library-steps li { padding-right:1rem; }
+.library-steps span { display:block; color:var(--muted); margin-top:.5rem; }
+.library-imports { margin:1.5rem 0; }
+.library-imports summary, .book-transfer summary { cursor:pointer; font-weight:600; padding:.5rem 0; }
+#book-reader { scroll-margin-top:90px; }
+.main-sidebar nav button[aria-current="page"] { border-color:var(--accent); }
+@media(max-width:680px) { .library-steps { grid-template-columns:1fr; } .hero-copy h2 { font-size:2rem; } }

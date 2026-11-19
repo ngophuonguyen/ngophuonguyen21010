@@ -1,15 +1,11 @@
-import { lazy, Suspense, useState } from "react";
+import { lazy, Suspense, useState, useEffect } from "react";
 import {
-  ArrowUpRight,
-  ArrowRight,
   BookOpen,
   Headphones,
   Layers,
   LayoutDashboard,
   Route,
   Sparkles,
-  Clock3,
-  Check,
   Globe2,
   Trophy,
   RotateCcw,
@@ -22,11 +18,8 @@ import {
 } from "./features/dictionary/Dictionary";
 import BrandLogo from "./features/BrandLogo";
 import { StudioProvider } from "./features/studio/StudioProgress";
-import Leaderboard, { RankCard } from "./features/studio/Leaderboard";
-import {
-  CurriculumProvider,
-  useCurriculum,
-} from "./features/curriculum/CurriculumProgress";
+import Leaderboard from "./features/studio/Leaderboard";
+import { CurriculumProvider } from "./features/curriculum/CurriculumProgress";
 import { CurriculumPlan } from "./features/curriculum/CurriculumPlan";
 const DailyLesson = lazy(() => import("./features/curriculum/Curriculum"));
 const Books = lazy(() => import("./features/books/Books"));
@@ -38,17 +31,64 @@ const Listening = lazy(() =>
   import("./ListeningLibrary").then((m) => ({ default: m.ListeningLibrary })),
 );
 const Grammar = lazy(() => import("./features/Grammar"));
+import StudyHome from "./features/journey/StudyHome";
+import CourseReview from "./features/journey/CourseReview";
+import {
+  readLocation,
+  locationUrl,
+  type Page,
+} from "./features/journey/navigation";
 const nav = [
-  { id: "home", label: "Overview", icon: LayoutDashboard },
-  { id: "vocabulary", label: "Vocabulary studio", icon: Layers },
-  { id: "books", label: "Books & exam practice", icon: BookOpen },
-  { id: "reading", label: "Reading & dialogue", icon: BookOpen },
-  { id: "listening", label: "Listening studio", icon: Headphones },
-  { id: "grammar", label: "Grammar practice", icon: Sparkles },
-  { id: "plan", label: "Learning plan", icon: Route },
-  { id: "review", label: "Spaced review", icon: RotateCcw },
-  { id: "leaderboard", label: "Practice ranks", icon: Trophy },
-];
+  { id: "home", label: "Today", icon: LayoutDashboard },
+  { id: "plan", label: "30-day course", icon: Route },
+  { id: "books", label: "My library", icon: BookOpen },
+  { id: "review", label: "Review my lessons", icon: RotateCcw },
+  { id: "practice", label: "Practice tools", icon: Layers },
+] as const;
+const tools = [
+  {
+    id: "vocabulary",
+    label: "Four-step vocabulary",
+    description:
+      "One independent six-word batch: introduction, sentence production, listening and a visual task.",
+    icon: Layers,
+  },
+  {
+    id: "listening",
+    label: "Three-pass listening",
+    description:
+      "Practise a studio story or bring a recording and captions. Studio progress is separate from daily lessons.",
+    icon: Headphones,
+  },
+  {
+    id: "reading",
+    label: "Interactive reading",
+    description:
+      "Two additional passages with word lookup, sentence translations and grammar insights.",
+    icon: BookOpen,
+  },
+  {
+    id: "grammar",
+    label: "Foundation grammar",
+    description:
+      "An independent revision quiz. Its result does not complete a course day.",
+    icon: Sparkles,
+  },
+  {
+    id: "spaced",
+    label: "Studio flashcards",
+    description:
+      "Spaced recall for the vocabulary studio’s original six words.",
+    icon: RotateCcw,
+  },
+  {
+    id: "leaderboard",
+    label: "Practice ranks",
+    description:
+      "Your device’s studio XP, rank and decay rules, alongside labelled sample peers.",
+    icon: Trophy,
+  },
+] as const;
 export default function App() {
   const l = useLearning();
   return (
@@ -66,22 +106,54 @@ function Workspace({
 }: {
   learning: ReturnType<typeof useLearning>;
 }) {
-  const daily = useCurriculum();
-  const openDay = (n: number) => {
-    if (n >= 1 && n <= 30) {
-      setDay(n);
-      setPage("day");
-      window.scrollTo({ top: 0, behavior: "instant" });
+  const [location, setLocation] = useState(() =>
+    readLocation(window.location.search),
+  );
+  const { page, day } = location;
+  const scope = l.user?.id ?? "guest";
+  const [last, setLast] = useState(() => {
+    try {
+      return Number(localStorage.getItem(`deutsch-last-day:${scope}`)) || 1;
+    } catch {
+      return 1;
     }
+  });
+  useEffect(() => {
+    const back = () => setLocation(readLocation(window.location.search));
+    window.addEventListener("popstate", back);
+    return () => window.removeEventListener("popstate", back);
+  }, []);
+  function navigate(next: Page, n = day, from?: "books" | "practice") {
+    const target = { page: next, day: n, from };
+    window.history.pushState(
+      null,
+      "",
+      locationUrl(window.location.href, target),
+    );
+    setLocation(target);
+    window.scrollTo({ top: 0, behavior: "instant" });
+  }
+  const setPage = (next: Page) => navigate(next);
+  useEffect(() => {
+    if (page !== "day") return;
+    setLast(day);
+    try {
+      localStorage.setItem(`deutsch-last-day:${scope}`, String(day));
+    } catch {
+      /* Course drafts have their own storage notice. */
+    }
+  }, [page, day, scope]);
+  const openDay = (n: number) => {
+    if (!Number.isInteger(n) || n < 1 || n > 30) return;
+    navigate("day", n);
   };
-  const [page, setPage] = useState("home"),
-    [day, setDay] = useState(1);
+  const optional = tools.some((t) => t.id === page) || page === "resources";
   const label =
     page === "day"
-      ? "Daily lesson"
+      ? `Day ${day}`
       : page === "resources"
         ? "Listening resources"
-        : (nav.find((n) => n.id === page)?.label ?? "Overview");
+        : ([...nav, ...tools].find((n) => n.id === page)?.label ?? "Today");
   function complete(score: number) {
     l.recordAttempt(day, score, 5);
   }
@@ -107,15 +179,23 @@ function Workspace({
             <button
               key={n.id}
               className={
-                page === n.id || (page === "resources" && n.id === "listening")
+                page === n.id ||
+                (page === "day" && n.id === "plan") ||
+                (optional && n.id === "practice")
                   ? "active"
                   : ""
+              }
+              aria-current={
+                page === n.id ||
+                (page === "day" && n.id === "plan") ||
+                (optional && n.id === "practice")
+                  ? "page"
+                  : undefined
               }
               onClick={() => setPage(n.id)}
             >
               <n.icon size={19} />
               <span>{n.label}</span>
-              {n.id === "vocabulary" && <small>NEW</small>}
             </button>
           ))}
         </nav>
@@ -162,198 +242,70 @@ function Workspace({
             }
           >
             <div inert={l.blocked}>
+              {optional && (
+                <div className="journey-context">
+                  <button
+                    className="button subtle"
+                    onClick={() =>
+                      page === "resources"
+                        ? navigate("listening", day, location.from)
+                        : setPage(
+                            location.from === "books" ? "books" : "practice",
+                          )
+                    }
+                  >
+                    {page === "resources"
+                      ? "Back to Listening studio"
+                      : location.from === "books"
+                        ? "Back to My library"
+                        : "Back to Practice tools"}
+                  </button>
+                  <span>
+                    Optional practice · Separate from course completion
+                  </span>
+                </div>
+              )}
               {page === "home" && (
+                <StudyHome
+                  last={last}
+                  onDay={openDay}
+                  onCourse={() => setPage("plan")}
+                  onBooks={() => setPage("books")}
+                />
+              )}
+              {page === "review" && (
+                <CourseReview
+                  onDay={openDay}
+                  onCourse={() => setPage("plan")}
+                />
+              )}
+              {page === "practice" && (
                 <>
                   <div className="page-heading">
-                    <span className="eyebrow">
-                      <span className="rose-dot" /> A LITTLE GERMAN, EVERY DAY
-                    </span>
+                    <span className="eyebrow">OPTIONAL PRACTICE</span>
                     <h1>
-                      Your next chapter starts here<span>.</span>
+                      Choose a skill to strengthen<span>.</span>
                     </h1>
                     <p>
-                      You are not starting from zero. You are finding your
-                      rhythm again.
+                      These independent tools support your course. Start your
+                      daily lesson from Today; studio practice does not mark a
+                      course day complete.
                     </p>
                   </div>
-                  <section className="hero">
-                    <div className="hero-copy">
-                      <span className="pill">A PERSONAL PATH · B1 → B2</span>
-                      <h2>
-                        A world of words.
-                        <br />
-                        <em>Make it yours.</em>
-                      </h2>
-                      <p>
-                        Less memorizing. More meaning.
-                        <br />
-                        Read, listen, and use German in your own voice.
-                      </p>
-                      <button
-                        className="button primary"
-                        onClick={() => setPage("vocabulary")}
-                      >
-                        Enter vocabulary studio <ArrowRight size={17} />
-                      </button>
-                      <small>
-                        <Clock3 size={14} /> One focused batch. Six useful
-                        words.
-                      </small>
-                    </div>
-                    <div
-                      className="hero-image"
-                      role="img"
-                      aria-label="A pink-lit planet against a dark star field"
-                    >
-                      <span className="orbit-label">
-                        DEIN NÄCHSTER SCHRITT.
-                      </span>
-                    </div>
-                  </section>
-                  <section className="stats-grid">
-                    <div className="card">
-                      <span className="stat-icon">
-                        <Route size={19} />
-                      </span>
-                      <div>
-                        <small>Learning days</small>
-                        <strong>
-                          {daily.completed.length}
-                          <em> / 30</em>
-                        </strong>
-                      </div>
-                      <span
-                        className="mini-progress"
-                        style={{
-                          background: `conic-gradient(var(--accent) ${(daily.completed.length / 30) * 360}deg, var(--border) 0deg)`,
-                        }}
-                      />
-                    </div>
-                    <div className="card">
-                      <span className="stat-icon">
-                        <Clock3 size={19} />
-                      </span>
-                      <div>
-                        <small>Your daily intention</small>
-                        <strong>
-                          30<em> minutes</em>
-                        </strong>
-                      </div>
-                    </div>
-                    <div className="card">
-                      <span className="stat-icon">
-                        <BookOpen size={19} />
-                      </span>
-                      <div>
-                        <small>A fresh vocabulary batch</small>
-                        <strong>
-                          06<em> words in context</em>
-                        </strong>
-                      </div>
-                    </div>
-                  </section>
-                  <div className="merge-feature-row">
-                    <RankCard onReview={() => setPage("review")} />
-                    <section className="card merge-feature-intro">
-                      <span className="eyebrow">
-                        LISTEN DEEPER. REMEMBER LONGER.
-                      </span>
-                      <h2>One story. Three ways to hear it.</h2>
-                      <p>
-                        Listen without the transcript, follow the German, then
-                        connect it to English. Your study notes and completed
-                        passes stay on this device.
-                      </p>
-                      <button
-                        className="button primary"
-                        onClick={() => setPage("listening")}
-                      >
-                        Open three-pass listening <ArrowRight size={16} />
-                      </button>
-                      <button
-                        className="button subtle"
-                        onClick={() => setPage("leaderboard")}
-                      >
-                        Explore practice ranks <Trophy size={16} />
-                      </button>
-                    </section>
-                  </div>
-                  <div className="dashboard-grid">
-                    <section className="card">
-                      <div className="section-heading">
-                        <h2>Make room for a little progress.</h2>
-                        <span className="muted">Today’s focus</span>
-                      </div>
-                      {[
-                        {
-                          id: "vocabulary",
-                          num: "01",
-                          title: "Meet six useful words",
-                          description:
-                            "Grammar, collocations, and your own sentences",
-                          icon: Layers,
-                          time: "10 min",
-                        },
-                        {
-                          id: "reading",
-                          num: "02",
-                          title: "Read between the lines",
-                          description:
-                            "Word lookup, idioms, and grammar insights",
-                          icon: BookOpen,
-                          time: "10 min",
-                        },
-                        {
-                          id: "listening",
-                          num: "03",
-                          title: "Listen to real German",
-                          description:
-                            "A short native-speaker video or course resource",
-                          icon: Headphones,
-                          time: "10 min",
-                        },
-                      ].map((t) => (
+                  <div className="plan-grid">
+                    {tools.map((t) => (
+                      <section className="card" key={t.id}>
+                        <t.icon size={24} />
+                        <h2>{t.label}</h2>
+                        <p>{t.description}</p>
                         <button
-                          className="daily-task"
-                          key={t.id}
-                          onClick={() => setPage(t.id)}
+                          className="button secondary"
+                          onClick={() => navigate(t.id, day, "practice")}
                         >
-                          <small>{t.num}</small>
-                          <span className="task-icon">
-                            <t.icon size={20} />
-                          </span>
-                          <div>
-                            <strong>{t.title}</strong>
-                            <span>{t.description}</span>
-                          </div>
-                          <em>{t.time}</em>
-                          <ArrowUpRight size={17} />
+                          Open {t.label}
                         </button>
-                      ))}
-                    </section>
-                    <section className="card expression-card">
-                      <span className="eyebrow">
-                        ONE EXPRESSION TO TAKE WITH YOU
-                      </span>
-                      <h2 lang="de">
-                        Am Ball
-                        <br />
-                        <em>bleiben.</em>
-                      </h2>
-                      <p>Keep at it. Stay with it.</p>
-                      <blockquote lang="de">
-                        „Auch wenn es schwierig wird,
-                        <br />
-                        bleibe ich am Ball.“
-                      </blockquote>
-                      <small>Even when it gets difficult, I keep at it.</small>
-                      <button
-                        className="button subtle"
-                        onClick={() => setPage("reading")}
-                      >
-                        Find it in context <ArrowUpRight size={15} />
-                      </button>
-                    </section>
+                      </section>
+                    ))}
                   </div>
                 </>
               )}
@@ -368,7 +320,7 @@ function Workspace({
                 <Books
                   key={l.user?.id ?? "guest"}
                   scope={l.user?.id ?? "guest"}
-                  onListening={() => setPage("listening")}
+                  onListening={() => navigate("listening", day, "books")}
                 />
               )}
               {page === "reading" && <Reading />}
@@ -380,12 +332,16 @@ function Workspace({
                 />
               )}{" "}
               {page === "listening" && (
-                <ListeningStudio onResources={() => setPage("resources")} />
+                <ListeningStudio
+                  onResources={() => navigate("resources", day, location.from)}
+                />
               )}
               {page === "leaderboard" && (
-                <Leaderboard onReview={() => setPage("review")} />
+                <Leaderboard
+                  onReview={() => navigate("spaced", day, location.from)}
+                />
               )}
-              {page === "review" && <Review />}
+              {page === "spaced" && <Review />}
               {page === "grammar" && (
                 <Grammar
                   key={`${day}:${l.user?.id ?? "guest"}`}
