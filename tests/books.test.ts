@@ -8,8 +8,8 @@ import {
   textLines,
 } from "../src/features/books/catalog.ts";
 test("supplied editions have unique identities and every page guide stays inside its PDF", () => {
-  assert.equal(books.length, 3);
-  assert.equal(new Set(books.map((b) => b.sha256)).size, 3);
+  assert.equal(books.length, 4);
+  assert.equal(new Set(books.map((b) => b.sha256)).size, 4);
   for (const b of books) {
     assert.match(b.sha256, /^[a-f0-9]{64}$/);
     assert.equal(new URL(b.source).protocol, "https:");

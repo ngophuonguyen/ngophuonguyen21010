@@ -1,3 +1,5 @@
+import { applyBookRequest } from "./requests";
+import type { BookRequest } from "../journey/navigation";
 import { findMaterial } from "./materials";
 import PersonalLibrary from "./PersonalLibrary";
 import { lazy, Suspense, useEffect, useState } from "react";
@@ -8,9 +10,13 @@ const PdfReader = lazy(() => import("./PdfReader"));
 export default function Books({
   scope,
   onListening,
+  request,
+  onLocation,
 }: {
   scope: string;
   onListening: () => void;
+  request?: BookRequest;
+  onLocation: (request: BookRequest) => void;
 }) {
   const [readyBook, setReadyBook] = useState<string | null>(null);
   const [refresh, setRefresh] = useState(0),
@@ -20,6 +26,7 @@ export default function Books({
     } | null>(null);
   const key = `deutsch-books-v1:${scope}`;
   const [selected, setSelected] = useState(() => {
+      if (request) return request.bookId;
       try {
         return (
           localStorage.getItem(`deutsch-selected-book:${scope}`) || books[0].id
@@ -31,9 +38,12 @@ export default function Books({
     [storageError, setStorageError] = useState(""),
     [progress, setProgress] = useState(() => {
       try {
-        return readBookProgress(localStorage.getItem(key));
+        return applyBookRequest(
+          readBookProgress(localStorage.getItem(key)),
+          request,
+        );
       } catch {
-        return {};
+        return applyBookRequest({}, request);
       }
     });
   const book = books.find((b) => b.id === selected) ?? books[0],
@@ -42,8 +52,33 @@ export default function Books({
   const guide =
     book.guides.find((g) => g.id === saved.guide && !!g.review === review) ??
     book.guides.find((g) => !!g.review === review);
-  const edit = (patch: Partial<BookProgress>) =>
-    setProgress((p) => ({ ...p, [book.id]: { ...saved, ...patch } }));
+  const selectBook = (id: string) => {
+    const target = books.find((b) => b.id === id);
+    if (!target) return;
+    setSelected(id);
+    const p = progress[id],
+      g = target.guides.find((g) => g.id === p?.guide) ?? target.guides[0];
+    onLocation({ bookId: id, guideId: g.id, page: p?.page ?? g.page });
+  };
+  const edit = (patch: Partial<BookProgress>) => {
+    const view = patch.view ?? saved.view;
+    const g =
+      book.guides.find(
+        (g) =>
+          g.id === (patch.guide ?? saved.guide) &&
+          !!g.review === (view === "review"),
+      ) ?? book.guides.find((g) => !!g.review === (view === "review"));
+    const page =
+      patch.page ??
+      ((patch.guide || patch.view !== undefined) && g ? g.page : saved.page);
+    setProgress((p) => ({ ...p, [book.id]: { ...saved, ...patch, page } }));
+    if (g) onLocation({ bookId: book.id, guideId: g.id, page });
+  };
+  useEffect(() => {
+    if (!request) return;
+    setSelected(request.bookId);
+    setProgress((old) => applyBookRequest(old, request));
+  }, [request?.bookId, request?.guideId, request?.page]);
   useEffect(() => {
     try {
       localStorage.setItem(key, JSON.stringify(progress));
@@ -97,7 +132,7 @@ export default function Books({
           <select
             value={book.id}
             onChange={(e) => {
-              setSelected(e.target.value);
+              selectBook(e.target.value);
             }}
           >
             {books.map((b) => (
@@ -268,7 +303,7 @@ export default function Books({
             page={saved.page}
             onPage={(page) => edit({ page })}
             onIdentify={(id) => {
-              setSelected(id);
+              if (id !== book.id) selectBook(id);
             }}
           />
         </Suspense>

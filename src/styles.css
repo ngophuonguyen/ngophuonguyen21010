@@ -2910,3 +2910,12 @@ footer > span {
 #book-reader { scroll-margin-top:90px; }
 .main-sidebar nav button[aria-current="page"] { border-color:var(--accent); }
 @media(max-width:680px) { .library-steps { grid-template-columns:1fr; } .hero-copy h2 { font-size:2rem; } }
+
+.lesson-tracks { display:flex; flex-wrap:wrap; gap:.75rem; margin:1rem 0 1.5rem; }
+.book-unit { display:grid; gap:1.25rem; }
+.book-unit h3 { font-size:1.15rem; margin:1rem 0; }
+.book-unit h4 { font-size:1rem; margin:1rem 0; }
+.book-unit ul { padding-left:1.25rem; line-height:1.9; }
+.book-source { border:1px solid var(--border); border-radius:12px; padding:1rem; margin:.75rem 0; }
+.book-source strong { display:block; color:var(--accent); }
+.book-support summary { cursor:pointer; padding:1rem 0; font-weight:600; }

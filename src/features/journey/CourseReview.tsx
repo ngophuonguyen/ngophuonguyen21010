@@ -1,15 +1,31 @@
+import { useBookPath } from "../book-path/BookPathProgress";
+import { getBookUnit } from "../../content/book-path/units";
+import { freshDay } from "../curriculum/progress";
 import { lessons } from "../../content/curriculum";
 import { useCurriculum } from "../curriculum/CurriculumProgress";
 import { hasWork } from "./navigation";
 export default function CourseReview({
   onDay,
   onCourse,
+  onBookDay,
 }: {
   onDay: (day: number) => void;
   onCourse: () => void;
+  onBookDay: (day: number) => void;
 }) {
+  const b = useBookPath();
   const c = useCurriculum(),
-    started = lessons.filter((l) => hasWork(c.days[l.id]));
+    started = lessons.filter((l) => {
+      const u = getBookUnit(l.day),
+        p = u ? b.units[u.id] : undefined;
+      return (
+        hasWork(c.days[l.id]) ||
+        (!!p &&
+          (!!p.response ||
+            p.sources.length > 0 ||
+            p.answers.some((a) => a !== null)))
+      );
+    });
   return (
     <>
       <div className="page-heading">
@@ -37,7 +53,7 @@ export default function CourseReview({
       )}
       <div className="plan-grid">
         {started.map((l) => {
-          const p = c.days[l.id],
+          const p = c.days[l.id] ?? freshDay(l),
             mistakes = p.checked.filter(
               (v, i) => v && p.answers[i] !== l.quiz[i].answer,
             ).length;
@@ -51,12 +67,26 @@ export default function CourseReview({
                 {p.seen.length}/7 sections reviewed · {mistakes} checked answers
                 to revisit
               </p>
+              <p>
+                Book-linked practice:{" "}
+                {b.completed.includes(l.day)
+                  ? "completed"
+                  : b.units[getBookUnit(l.day)!.id]
+                    ? "in progress"
+                    : "not started"}
+              </p>
               <p className="micro">
                 Speaking draft: {p.speaking ? "saved" : "empty"} · Writing
                 draft: {p.writing ? "saved" : "empty"}
               </p>
               <button className="button secondary" onClick={() => onDay(l.day)}>
                 Review day {l.day}
+              </button>
+              <button
+                className="button secondary"
+                onClick={() => onBookDay(l.day)}
+              >
+                Review book practice for day {l.day}
               </button>
             </section>
           );

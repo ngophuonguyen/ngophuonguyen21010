@@ -1,0 +1,684 @@
+{
+  "checkedDays": 30,
+  "valid": true,
+  "errors": [],
+  "units": [
+    {
+      "day": 1,
+      "focus": "Arrange information clearly",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch1-m1",
+          "pdfPage": 11,
+          "printedPage": 10
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-word-order",
+          "pdfPage": 189,
+          "printedPage": 188
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 2,
+      "focus": "Turn an experience into a clear account",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch1-m1",
+          "pdfPage": 11,
+          "printedPage": 10
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-tenses",
+          "pdfPage": 179,
+          "printedPage": 178
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    },
+    {
+      "day": 3,
+      "focus": "Reconstruct a sequence from accounts",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch8-m4",
+          "pdfPage": 129,
+          "printedPage": 128
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-sequence",
+          "pdfPage": 193,
+          "printedPage": 192
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "reading",
+          "pdfPage": 8
+        }
+      ]
+    },
+    {
+      "day": 4,
+      "focus": "Choose a preposition with its case",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch8-m1",
+          "pdfPage": 123,
+          "printedPage": 122
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-prepositions",
+          "pdfPage": 188,
+          "printedPage": 187
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 5,
+      "focus": "Support a learning decision",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch2-m2",
+          "pdfPage": 29,
+          "printedPage": 28
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-connectors",
+          "pdfPage": 192,
+          "printedPage": 191
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 6,
+      "focus": "Disagree without escalating",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch2-m4",
+          "pdfPage": 33,
+          "printedPage": 32
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-connectors",
+          "pdfPage": 192,
+          "printedPage": 191
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    },
+    {
+      "day": 7,
+      "focus": "Explain the value of a local project",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch4-m1",
+          "pdfPage": 59,
+          "printedPage": 58
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "reading",
+          "pdfPage": 8
+        }
+      ]
+    },
+    {
+      "day": 8,
+      "focus": "Clarify a request on the phone",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch6-m2",
+          "pdfPage": 93,
+          "printedPage": 92
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-hypothetical",
+          "pdfPage": 180,
+          "printedPage": 179
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    },
+    {
+      "day": 9,
+      "focus": "Describe a hypothetical impression",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch6-m3",
+          "pdfPage": 95,
+          "printedPage": 94
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-comparisons",
+          "pdfPage": 191,
+          "printedPage": 190
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    },
+    {
+      "day": 10,
+      "focus": "Describe people precisely",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch4-m1",
+          "pdfPage": 59,
+          "printedPage": 58
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-relatives",
+          "pdfPage": 194,
+          "printedPage": 193
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "reading",
+          "pdfPage": 8
+        }
+      ]
+    },
+    {
+      "day": 11,
+      "focus": "Keep the preposition inside the relative clause",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch8-m1",
+          "pdfPage": 123,
+          "printedPage": 122
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-relatives",
+          "pdfPage": 194,
+          "printedPage": 193
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "reading",
+          "pdfPage": 8
+        }
+      ]
+    },
+    {
+      "day": 12,
+      "focus": "Refer back without repeating every noun",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch8-m1",
+          "pdfPage": 123,
+          "printedPage": 122
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-pronominal",
+          "pdfPage": 185,
+          "printedPage": 184
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    },
+    {
+      "day": 13,
+      "focus": "Make a proportional comparison",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch2-m1",
+          "pdfPage": 27,
+          "printedPage": 26
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-comparisons",
+          "pdfPage": 191,
+          "printedPage": 190
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 14,
+      "focus": "Balance two professional priorities",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch3-m1",
+          "pdfPage": 43,
+          "printedPage": 42
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 15,
+      "focus": "Explain a process without centring the actor",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch5-m1",
+          "pdfPage": 75,
+          "printedPage": 74
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-passive",
+          "pdfPage": 181,
+          "printedPage": 180
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "reading",
+          "pdfPage": 8
+        }
+      ]
+    },
+    {
+      "day": 16,
+      "focus": "Distinguish the action from its result",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch6-m1",
+          "pdfPage": 91,
+          "printedPage": 90
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-passive",
+          "pdfPage": 181,
+          "printedPage": 180
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "reading",
+          "pdfPage": 8
+        }
+      ]
+    },
+    {
+      "day": 17,
+      "focus": "Use a noun–verb combination naturally",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch4-m3",
+          "pdfPage": 63,
+          "printedPage": 62
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-noun-verbs",
+          "pdfPage": 182,
+          "printedPage": 181
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "listening",
+          "pdfPage": 18
+        }
+      ]
+    },
+    {
+      "day": 18,
+      "focus": "Ask for useful interview information",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch3-m4",
+          "pdfPage": 49,
+          "printedPage": 48
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    },
+    {
+      "day": 19,
+      "focus": "Explain a preservation strategy",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch7-m1",
+          "pdfPage": 107,
+          "printedPage": 106
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-cohesion",
+          "pdfPage": 195,
+          "printedPage": 194
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "reading",
+          "pdfPage": 8
+        }
+      ]
+    },
+    {
+      "day": 20,
+      "focus": "Evaluate a suggestion for the working day",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch5-m4",
+          "pdfPage": 81,
+          "printedPage": 80
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-connectors",
+          "pdfPage": 192,
+          "printedPage": 191
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 21,
+      "focus": "Build an argument about digital habits",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch4-m3",
+          "pdfPage": 63,
+          "printedPage": 62
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 22,
+      "focus": "Compare what sources actually say",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch8-m2",
+          "pdfPage": 125,
+          "printedPage": 124
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-reported",
+          "pdfPage": 180,
+          "printedPage": 179
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "reading",
+          "pdfPage": 8
+        }
+      ]
+    },
+    {
+      "day": 23,
+      "focus": "Write a complaint with a clear remedy",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch10-m4",
+          "pdfPage": 161,
+          "printedPage": 160
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 24,
+      "focus": "Offer an alternative in a team",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch3-m3",
+          "pdfPage": 47,
+          "printedPage": 46
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-connectors",
+          "pdfPage": 192,
+          "printedPage": 191
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    },
+    {
+      "day": 25,
+      "focus": "Weigh an argument instead of listing opinions",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch2-m2",
+          "pdfPage": 29,
+          "printedPage": 28
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    },
+    {
+      "day": 26,
+      "focus": "Make a formal application specific",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch3-m4",
+          "pdfPage": 49,
+          "printedPage": 48
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 27,
+      "focus": "Keep a structured listening record",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch9-m4",
+          "pdfPage": 145,
+          "printedPage": 144
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "teil4",
+          "pdfPage": 21
+        },
+        {
+          "book": "klett-teacher",
+          "guide": "speaker-grid",
+          "pdfPage": 35
+        }
+      ]
+    },
+    {
+      "day": 28,
+      "focus": "Make a narrative easy to follow",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch7-m2",
+          "pdfPage": 109,
+          "printedPage": 108
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-sequence",
+          "pdfPage": 193,
+          "printedPage": 192
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "writing",
+          "pdfPage": 24
+        }
+      ]
+    },
+    {
+      "day": 29,
+      "focus": "Separate a past alternative from an unreal impression",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch6-m3",
+          "pdfPage": 95,
+          "printedPage": 94
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-hypothetical",
+          "pdfPage": 180,
+          "printedPage": 179
+        },
+        {
+          "book": "goethe-adults",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    },
+    {
+      "day": 30,
+      "focus": "Turn reflection into a next learning plan",
+      "questions": 2,
+      "sources": [
+        {
+          "book": "aspekte-b2",
+          "guide": "ch10-m3",
+          "pdfPage": 159,
+          "printedPage": 158
+        },
+        {
+          "book": "aspekte-b2",
+          "guide": "grammar-connectors",
+          "pdfPage": 192,
+          "printedPage": 191
+        },
+        {
+          "book": "goethe-youth",
+          "guide": "speaking",
+          "pdfPage": 26
+        }
+      ]
+    }
+  ]
+}

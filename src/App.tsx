@@ -1,3 +1,6 @@
+import { BookPathProvider } from "./features/book-path/BookPathProgress";
+import type { BookLink } from "./content/book-path/units";
+import type { Location } from "./features/journey/navigation";
 import { lazy, Suspense, useState, useEffect } from "react";
 import {
   BookOpen,
@@ -95,7 +98,9 @@ export default function App() {
     <StudioProvider key={l.user?.id ?? "guest"} scope={l.user?.id ?? "guest"}>
       <DictionaryProvider>
         <CurriculumProvider scope={l.user?.id ?? "guest"}>
-          <Workspace learning={l} />
+          <BookPathProvider scope={l.user?.id ?? "guest"}>
+            <Workspace learning={l} />
+          </BookPathProvider>
         </CurriculumProvider>
       </DictionaryProvider>
     </StudioProvider>
@@ -123,8 +128,13 @@ function Workspace({
     window.addEventListener("popstate", back);
     return () => window.removeEventListener("popstate", back);
   }, []);
-  function navigate(next: Page, n = day, from?: "books" | "practice") {
-    const target = { page: next, day: n, from };
+  function navigate(
+    next: Page,
+    n = day,
+    from?: "books" | "practice" | "day",
+    detail: Partial<Location> = {},
+  ) {
+    const target = { page: next, day: n, from, ...detail };
     window.history.pushState(
       null,
       "",
@@ -145,8 +155,17 @@ function Workspace({
   }, [page, day, scope]);
   const openDay = (n: number) => {
     if (!Number.isInteger(n) || n < 1 || n > 30) return;
-    navigate("day", n);
+    navigate("day", n, undefined, { track: location.track });
   };
+  const openBook = (source: BookLink) =>
+    navigate("books", day, "day", {
+      track: "book",
+      book: {
+        bookId: source.bookId,
+        guideId: source.guideId,
+        page: source.page,
+      },
+    });
   const optional = tools.some((t) => t.id === page) || page === "resources";
   const label =
     page === "day"
@@ -271,12 +290,18 @@ function Workspace({
                   onDay={openDay}
                   onCourse={() => setPage("plan")}
                   onBooks={() => setPage("books")}
+                  onBookPath={() =>
+                    navigate("plan", day, undefined, { track: "book" })
+                  }
                 />
               )}
               {page === "review" && (
                 <CourseReview
                   onDay={openDay}
                   onCourse={() => setPage("plan")}
+                  onBookDay={(n) =>
+                    navigate("day", n, undefined, { track: "book" })
+                  }
                 />
               )}
               {page === "practice" && (
@@ -316,10 +341,36 @@ function Workspace({
                   authLoading={l.loading}
                 />
               )}{" "}
+              {page === "books" && location.from === "day" && (
+                <div className="journey-context">
+                  <button
+                    className="button secondary"
+                    onClick={() =>
+                      navigate("day", day, undefined, { track: "book" })
+                    }
+                  >
+                    Return to day {day} · book practice
+                  </button>
+                  <span>
+                    Book page linked from your course · Core lesson progress is
+                    preserved
+                  </span>
+                </div>
+              )}
               {page === "books" && (
                 <Books
                   key={l.user?.id ?? "guest"}
                   scope={l.user?.id ?? "guest"}
+                  request={location.book}
+                  onLocation={(book) => {
+                    const next = { ...location, book };
+                    window.history.replaceState(
+                      null,
+                      "",
+                      locationUrl(window.location.href, next),
+                    );
+                    setLocation(next);
+                  }}
                   onListening={() => navigate("listening", day, "books")}
                 />
               )}
@@ -349,13 +400,28 @@ function Workspace({
                   onComplete={complete}
                 />
               )}{" "}
-              {page === "plan" && <CurriculumPlan onOpen={openDay} />}
+              {page === "plan" && (
+                <CurriculumPlan
+                  onOpen={openDay}
+                  track={location.track}
+                  onTrack={(track) =>
+                    navigate("plan", day, undefined, { track })
+                  }
+                />
+              )}
               {page === "day" && (
                 <DailyLesson
                   key={`${l.user?.id ?? "guest"}-${day}`}
                   day={day}
                   onOpen={openDay}
-                  onPlan={() => setPage("plan")}
+                  onPlan={() =>
+                    navigate("plan", day, undefined, { track: location.track })
+                  }
+                  track={location.track}
+                  onTrack={(track) =>
+                    navigate("day", day, undefined, { track })
+                  }
+                  onBook={openBook}
                 />
               )}
             </div>
