@@ -1,3 +1,4 @@
+import { aspekteGuides } from "../../content/book-path/aspekte.ts";
 export type Guide = {
   id: string;
   label: string;
@@ -153,6 +154,18 @@ export const books: Book[] = [
         task: "After two listening attempts, inspect the speaker labels and mark the evidence for each answer.",
       },
     ],
+  },
+  {
+    id: "aspekte-b2",
+    title: "Aspekte neu B2",
+    subtitle: "Textbook · 10 chapters · supplied 2015-imprint scan",
+    pages: 202,
+    fileName: "Aspekte Neu B2 Lehrbuch.pdf",
+    sha256: "9e34885b7120115f565b4bb60d472ae7c710326ae1c70fa935fb017716b35f1d",
+    source: "https://www.klett-sprachen.de/aspekte-neu-b2/t-1/9783126050241",
+    edition:
+      "Supplied 202-page scan, ISBN 978-3-12-605024-1, 2015 imprint. Printed instructional page n is PDF page n + 1. Current publisher editions may differ. Separate textbook audio/DVD is not embedded in this PDF.",
+    guides: aspekteGuides,
   },
 ];
 export const identifyBook = (sha: string) =>

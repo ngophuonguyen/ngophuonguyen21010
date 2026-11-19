@@ -1,3 +1,4 @@
+import { useBookPath } from "../book-path/BookPathProgress";
 import { lessons } from "../../content/curriculum";
 import { useCurriculum } from "../curriculum/CurriculumProgress";
 import { schedule } from "../curriculum/types";
@@ -7,12 +8,15 @@ export default function StudyHome({
   onDay,
   onCourse,
   onBooks,
+  onBookPath,
 }: {
   last: number;
   onDay: (day: number) => void;
   onCourse: () => void;
   onBooks: () => void;
+  onBookPath: () => void;
 }) {
+  const b = useBookPath();
   const c = useCurriculum(),
     day = nextStudyDay(lessons, c.days, last),
     lesson = lessons[day - 1],
@@ -26,7 +30,7 @@ export default function StudyHome({
         </h1>
         <p>
           Study today’s lesson, check your answers, then return to review. Your
-          books support this path in a separate library.
+          books now have a linked practice pathway alongside it.
         </p>
       </div>
       <section className="hero">
@@ -81,17 +85,25 @@ export default function StudyHome({
           <span className="eyebrow">BOOKS YOU SHARED</span>
           <h2>Study from a document.</h2>
           <p>
-            Two Goethe B1 practice sets and one Klett teacher’s guide have
-            edition-specific page guides. Open your copy to read it, look up
-            words and keep notes.
+            Aspekte neu B2 now connects all 30 days to inspected modules and new
+            transfer tasks. Two Goethe B1 sets and the Klett teacher’s guide
+            provide additional skills practice.
           </p>
+          <p>
+            <strong>
+              Book pathway: {b.completed.length}/30 units completed
+            </strong>
+          </p>
+          <button className="button primary" onClick={onBookPath}>
+            Open book-linked pathway
+          </button>
           <button className="button secondary" onClick={onBooks}>
             Open my library
           </button>
           <p className="micro">
-            The 30-day course is independently authored. It has not been
-            automatically generated from these books. PDF imports are stored in
-            this browser, separately from chat attachments.
+            Core lessons stay intact. The new book pathway adds original
+            practice mapped to your sources. PDF copies are imported locally;
+            recordings are separate.
           </p>
         </section>
         <section className="card">

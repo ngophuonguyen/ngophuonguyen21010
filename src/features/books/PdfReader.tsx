@@ -1,3 +1,4 @@
+import { MAX_PDF_BYTES } from "./limits";
 import { useEffect, useRef, useState } from "react";
 import {
   getDocument,
@@ -89,8 +90,10 @@ export default function PdfReader({
     setFileName(file.name);
     setVerified(null);
     try {
-      if (file.size > 25 * 1024 * 1024)
-        throw new Error("Choose a PDF under 25 MB.");
+      if (file.size > MAX_PDF_BYTES)
+        throw new Error(
+          "Choose a PDF no larger than 200 MiB. For larger books, split a local copy into chapters.",
+        );
       const bytes = new Uint8Array(await file.arrayBuffer());
       if (!new TextDecoder().decode(bytes.slice(0, 1024)).includes("%PDF-"))
         throw new Error("This file is not a PDF.");
@@ -131,7 +134,7 @@ export default function PdfReader({
             .map((x) => x.toString(16).padStart(2, "0"))
             .join(""),
           scope,
-          level,
+          known?.id === "aspekte-b2" ? "B2" : known ? "B1" : level,
           (n, total) => {
             if (ticket === generation.current)
               setIndexStatus(`Indexing page ${n} of ${total}…`);
@@ -248,6 +251,8 @@ export default function PdfReader({
         </p>
       )}
       <p className="micro">
+        PDFs up to 200 MiB are supported, including the supplied Aspekte scan.
+        Large scans take longer to open and may exceed browser storage quota.
         PDF files and extracted text are saved in your reusable device library
         without uploading them. Notes and page bookmarks are also saved locally.
         Clicking a word sends only that term to the dictionary when needed.
