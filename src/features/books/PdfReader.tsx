@@ -1,3 +1,4 @@
+import { Localized } from "../language/Language";
 import { MAX_PDF_BYTES } from "./limits";
 import { useEffect, useRef, useState } from "react";
 import {
@@ -25,7 +26,10 @@ export default function PdfReader({
   scope: string;
   onStored: () => void;
   onReady: (bookId: string | null) => void;
-  openRequest: { file: File; ticket: number } | null;
+  openRequest: {
+    file: File;
+    ticket: number;
+  } | null;
   book: Book;
   page: number;
   onPage: (n: number) => void;
@@ -210,150 +214,155 @@ export default function PdfReader({
     };
   }, [pdf, current]);
   return (
-    <section className="card pdf-reader">
-      <div className="section-heading">
-        <div>
-          <span className="eyebrow">PERSONAL PDF READER</span>
-          <h2>Read. Click. Understand.</h2>
-        </div>
-        <button
-          className="button primary"
-          onClick={() => input.current?.click()}
-        >
-          {pdf ? "Choose another PDF" : "Open my PDF"}
-        </button>
-      </div>
-      <input
-        ref={input}
-        type="file"
-        accept="application/pdf,.pdf"
-        aria-label="Open personal PDF"
-        onChange={(e) => {
-          const file = e.target.files?.[0];
-          if (file) void openFile(file);
-          e.target.value = "";
-        }}
-      />
-      <label className="field-label">
-        Level for the next PDF import
-        <select
-          value={level}
-          onChange={(e) => setLevel(e.target.value as Material["level"])}
-        >
-          <option>B1</option>
-          <option>B2</option>
-          <option>Mixed</option>
-        </select>
-      </label>
-      {indexStatus && (
-        <p role="status" className="notice">
-          {indexStatus}
-        </p>
-      )}
-      <p className="micro">
-        PDFs up to 200 MiB are supported, including the supplied Aspekte scan.
-        Large scans take longer to open and may exceed browser storage quota.
-        PDF files and extracted text are saved in your reusable device library
-        without uploading them. Notes and page bookmarks are also saved locally.
-        Clicking a word sends only that term to the dictionary when needed.
-      </p>
-      {loading && <p role="status">Opening your PDF…</p>}
-      {error && (
-        <p role="alert" className="notice">
-          {error}
-        </p>
-      )}
-      {pdf ? (
-        <>
-          <p className="micro">
-            {fileName} · {pdf.numPages} pages ·{" "}
-            {verified === book.id
-              ? "Exact match to the supplied edition."
-              : "Edition not verified. Page guides refer to the supplied copy; check headings before using them."}
-          </p>
-          <form
-            className="pdf-page-controls"
-            onSubmit={(e) => {
-              e.preventDefault();
-              onPage(clampPage(Number(pageDraft), pdf.numPages));
+    <Localized>
+      {
+        <section className="card pdf-reader">
+          <div className="section-heading">
+            <div>
+              <span className="eyebrow">PERSONAL PDF READER</span>
+              <h2>Read. Click. Understand.</h2>
+            </div>
+            <button
+              className="button primary"
+              onClick={() => input.current?.click()}
+            >
+              {pdf ? "Choose another PDF" : "Open my PDF"}
+            </button>
+          </div>
+          <input
+            ref={input}
+            type="file"
+            accept="application/pdf,.pdf"
+            aria-label="Open personal PDF"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) void openFile(file);
+              e.target.value = "";
             }}
-          >
-            <button
-              type="button"
-              className="button secondary"
-              disabled={current <= 1 || rendering}
-              onClick={() => onPage(current - 1)}
+          />
+          <label className="field-label">
+            Level for the next PDF import
+            <select
+              value={level}
+              onChange={(e) => setLevel(e.target.value as Material["level"])}
             >
-              Previous page
-            </button>
-            <label className="field-label">
-              PDF page
-              <input
-                type="number"
-                min={1}
-                max={pdf.numPages}
-                value={pageDraft}
-                onChange={(e) => setPageDraft(e.target.value)}
-              />
-            </label>
-            <button type="submit" className="button secondary">
-              Go
-            </button>
-            <span>of {pdf.numPages}</span>
-            <button
-              type="button"
-              className="button secondary"
-              disabled={current >= pdf.numPages || rendering}
-              onClick={() => onPage(current + 1)}
-            >
-              Next page
-            </button>
-          </form>
-          {rendering && <p role="status">Rendering page {current}…</p>}
-          <div className="pdf-study-columns">
-            <div className="pdf-canvas-wrap">
-              <canvas
-                ref={canvas}
-                aria-label={`Original PDF page ${current}`}
-              />
-            </div>
-            <div className="pdf-extracted">
-              <h3>Click words in the extracted text.</h3>
+              <option>B1</option>
+              <option>B2</option>
+              <option>Mixed</option>
+            </select>
+          </label>
+          {indexStatus && (
+            <p role="status" className="notice">
+              {indexStatus}
+            </p>
+          )}
+          <p className="micro">
+            PDFs up to 200 MiB are supported, including the supplied Aspekte
+            scan. Large scans take longer to open and may exceed browser storage
+            quota. PDF files and extracted text are saved in your reusable
+            device library without uploading them. Notes and page bookmarks are
+            also saved locally. Clicking a word sends only that term to the
+            dictionary when needed.
+          </p>
+          {loading && <p role="status">Opening your PDF…</p>}
+          {error && (
+            <p role="alert" className="notice">
+              {error}
+            </p>
+          )}
+          {pdf ? (
+            <>
               <p className="micro">
-                Text order may differ in columns or tables. Check the original
-                page alongside it. No automatic translation or answer grading is
-                applied.
+                {fileName} · {pdf.numPages} pages ·{" "}
+                {verified === book.id
+                  ? "Exact match to the supplied edition."
+                  : "Edition not verified. Page guides refer to the supplied copy; check headings before using them."}
               </p>
-              {lines.length
-                ? lines.map((line, i) => (
-                    <p key={`${current}-${i}`}>
-                      <GermanText text={line} />
-                    </p>
-                  ))
-                : !rendering && (
-                    <p>
-                      No selectable text found on this page. Scanned images need
-                      OCR, which is not included.
-                    </p>
-                  )}
-            </div>
-          </div>
-        </>
-      ) : (
-        !loading && (
-          <div className="pdf-empty">
-            <p>
-              Choose <strong>{book.fileName}</strong> from your device to use
-              its page guide and word lookup.
-            </p>
-            <p>
-              Publisher PDFs and textbook recordings are not bundled into this
-              public website. The official-source links above provide the
-              available materials and audio.
-            </p>
-          </div>
-        )
-      )}
-    </section>
+              <form
+                className="pdf-page-controls"
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  onPage(clampPage(Number(pageDraft), pdf.numPages));
+                }}
+              >
+                <button
+                  type="button"
+                  className="button secondary"
+                  disabled={current <= 1 || rendering}
+                  onClick={() => onPage(current - 1)}
+                >
+                  Previous page
+                </button>
+                <label className="field-label">
+                  PDF page
+                  <input
+                    type="number"
+                    min={1}
+                    max={pdf.numPages}
+                    value={pageDraft}
+                    onChange={(e) => setPageDraft(e.target.value)}
+                  />
+                </label>
+                <button type="submit" className="button secondary">
+                  Go
+                </button>
+                <span>of {pdf.numPages}</span>
+                <button
+                  type="button"
+                  className="button secondary"
+                  disabled={current >= pdf.numPages || rendering}
+                  onClick={() => onPage(current + 1)}
+                >
+                  Next page
+                </button>
+              </form>
+              {rendering && <p role="status">Rendering page {current}…</p>}
+              <div className="pdf-study-columns">
+                <div className="pdf-canvas-wrap">
+                  <canvas
+                    ref={canvas}
+                    aria-label={`Original PDF page ${current}`}
+                  />
+                </div>
+                <div className="pdf-extracted">
+                  <h3>Click words in the extracted text.</h3>
+                  <p className="micro">
+                    Text order may differ in columns or tables. Check the
+                    original page alongside it. No automatic translation or
+                    answer grading is applied.
+                  </p>
+                  {lines.length
+                    ? lines.map((line, i) => (
+                        <p key={`${current}-${i}`}>
+                          <GermanText text={line} />
+                        </p>
+                      ))
+                    : !rendering && (
+                        <p>
+                          No selectable text found on this page. Scanned images
+                          need OCR, which is not included.
+                        </p>
+                      )}
+                </div>
+              </div>
+            </>
+          ) : (
+            !loading && (
+              <div className="pdf-empty">
+                <p>
+                  Choose <strong>{book.fileName}</strong> from your device to
+                  use its page guide and word lookup.
+                </p>
+                <p>
+                  Publisher PDFs and textbook recordings are not bundled into
+                  this public website. The official-source links above provide
+                  the available materials and audio.
+                </p>
+              </div>
+            )
+          )}
+        </section>
+      }
+    </Localized>
   );
 }

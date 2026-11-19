@@ -1,0 +1,868 @@
+import { lessons } from "../curriculum/index.ts";
+type Row = [
+  string,
+  string,
+  string,
+  string,
+  [string, string][],
+  string,
+  string,
+  string,
+  string,
+  string[],
+  [string, string],
+];
+export const nativeLessons: Row[] = [
+  [
+    "Bắt đầu lại bằng một lịch học vừa sức",
+    "Thì hiện tại và động từ tách",
+    "Trong câu chính, động từ đã chia đứng ở vị trí thứ hai. Tiền tố của động từ tách chuyển xuống cuối câu. Cụm chỉ thời gian có thể đứng đầu câu.",
+    "Sau bữa sáng, tôi bắt đầu bằng một bài tập ngắn.",
+    [
+      ["thói quen", "Một thói quen nhỏ giúp việc học của tôi dễ dàng hơn."],
+      [
+        "quyết tâm; mục tiêu tự đặt ra",
+        "Mục tiêu của tôi là đọc mười phút mỗi ngày.",
+      ],
+      ["tuân thủ; giữ đúng", "Tôi vẫn tuân theo kế hoạch học vào cuối tuần."],
+      ["đều đặn", "Những lần nghỉ đều đặn giúp tôi duy trì việc học."],
+    ],
+    "Mira thay việc mua sắm đầy tham vọng bằng một lịch học nhỏ và đánh giá hiệu quả vào mỗi Chủ nhật.",
+    "Nghe để xác định giờ bắt đầu mới và những gì Mira cần mang theo. Lượt đầu hãy ẩn bản chép lời.",
+    "Dùng zuerst, danach và regelmäßig. Nói trong 45–60 giây.",
+    "Viết 40–70 từ. Có một cụm chỉ thời gian, một động từ tách và một đề nghị cụ thể.",
+    [
+      "Chủ ngữ Mira dùng ngôi thứ ba nên động từ là fängt; tiền tố an đứng cuối câu chính.",
+      "Câu cuối cho biết cô ấy kiểm tra nhiệm vụ nào hữu ích rồi điều chỉnh kế hoạch.",
+      "Nicht um acht, sondern erst um halb neun đính chính giờ cũ thành 8 giờ 30.",
+    ],
+    [
+      "Mô tả thói quen học hiện tại và đề xuất một thay đổi nhỏ.",
+      "Viết tin nhắn cho bạn học: bạn học khi nào, luyện gì và cần hỗ trợ như thế nào?",
+    ],
+  ],
+  [
+    "Kể lại một trải nghiệm đáng nhớ",
+    "Thì Perfekt: dùng haben hay sein",
+    "Phần lớn hành động có tân ngữ dùng haben. Nhiều động từ chỉ sự thay đổi vị trí hoặc trạng thái dùng sein. Phân từ II đứng cuối câu.",
+    "Tôi đã đến Leipzig và thăm bạn bè ở đó.",
+    [
+      [
+        "trải nghiệm; sự kiện đã trải qua",
+        "Chuyến tàu là một trải nghiệm đặc biệt.",
+      ],
+      ["bỏ lỡ", "Tôi đã lỡ chuyến nối tiếp."],
+      ["nhớ lại", "Tôi nhớ người lái xe thân thiện."],
+      ["may mắn thay", "May mắn là đã có người giúp tôi."],
+    ],
+    "Jonas đi quá điểm cần xuống, được giúp đỡ và quyết định đặt báo thức cho lần sau.",
+    "Xác định đồ vật bị mất, nơi đang giữ đồ và hạn đến nhận.",
+    "Dùng ít nhất hai động từ ở Perfekt với hai trợ động từ khác nhau.",
+    "Viết 40–70 từ, có diễn biến, phản ứng và kết quả.",
+    [
+      "Aussteigen chỉ sự thay đổi vị trí nên tạo Perfekt bằng sein.",
+      "Anh ấy đặt báo thức cho chuyến sau thay vì từ bỏ chuyến đi.",
+      "Người gọi nói đồ vật được tìm thấy trong phòng hội thảo và đã chuyển đến quầy tiếp tân.",
+    ],
+    [
+      "Kể về một sự cố nhỏ và cách bạn giải quyết tình huống đó.",
+      "Viết đoạn kể ngắn về một chuyến đi diễn ra khác với dự định.",
+    ],
+  ],
+  [
+    "Mô tả cuộc sống trước đây",
+    "Präteritum của sein, haben và động từ khuyết thiếu",
+    "War, hatte và các dạng quá khứ của động từ khuyết thiếu xuất hiện cả trong hội thoại. Sau động từ khuyết thiếu, động từ còn lại giữ nguyên mẫu và đứng cuối câu.",
+    "Hồi nhỏ tôi thường phải trông em gái.",
+    [
+      ["ký ức", "Con phố này gợi lại nhiều ký ức."],
+      ["hồi đó", "Hồi đó ở đây chỉ có một cửa hàng."],
+      ["thay đổi", "Khu phố đã thay đổi rất nhiều."],
+      ["quen thuộc; đã quen", "Tôi đã quen với quãng đường dài đến trường."],
+    ],
+    "Leila nhớ lại sinh hoạt thời thơ ấu và có cảm xúc đan xen về những thay đổi của khu phố cũ.",
+    "Xác định trước đây ở đây có gì và sau đó được thay bằng gì.",
+    "Dùng früher, damals, heute và một dạng quá khứ của động từ khuyết thiếu.",
+    "Viết 40–70 từ. Mô tả quá khứ và nêu cảm nhận cá nhân có cân nhắc hai mặt.",
+    [
+      "Wohnte là dạng Präteritum của wohnen.",
+      "Cô ấy đánh giá cao việc trẻ em nay có thể chơi an toàn tại chỗ từng là bãi đỗ xe.",
+      "Thành phố ban đầu muốn làm bãi đỗ xe, nhưng cư dân đã vận động để có một khu vườn.",
+    ],
+    [
+      "So sánh một địa điểm thời thơ ấu với tình trạng hiện nay.",
+      "Viết một đoạn ngắn về sự thay đổi tại nơi bạn sống.",
+    ],
+  ],
+  [
+    "Đặt và thay đổi lịch hẹn",
+    "Động từ đi với giới từ cố định",
+    "Một số động từ yêu cầu giới từ riêng: warten auf + Akkusativ, teilnehmen an + Dativ. Hãy học cả cụm cùng cách ngữ pháp đi kèm.",
+    "Tôi đang chờ phản hồi của quý vị và sẽ tham gia buổi gặp.",
+    [
+      ["thỏa thuận", "Chúng tôi ghi lại thỏa thuận bằng văn bản."],
+      ["hoãn; đổi lịch", "Chúng ta chuyển lịch hẹn sang thứ Năm được không?"],
+      ["có thể sắp xếp; rảnh", "Buổi sáng tôi không sắp xếp được."],
+      ["phản hồi", "Cảm ơn phản hồi nhanh chóng của quý vị."],
+    ],
+    "Cư dân thống nhất lịch họp khác và cho phép người vắng mặt gửi ý kiến bằng văn bản.",
+    "So sánh hai lịch hẹn được đề xuất và ghi lại giấy tờ không cần gửi lại.",
+    "Dùng warten auf và một lời đề nghị lịch sự.",
+    "Viết 40–70 từ. Có lời xin lỗi, lý do ngắn gọn và đề nghị xác nhận.",
+    [
+      "Teilnehmen an yêu cầu Dativ: an dem thường rút gọn thành am.",
+      "Bài đọc nêu rõ có thể gửi đề xuất bằng văn bản trước buổi họp.",
+      "Cô ấy cần xác nhận lịch nào trong hai lựa chọn phù hợp với mình.",
+    ],
+    [
+      "Lịch sự xin đổi lịch hẹn và đưa ra hai phương án.",
+      "Viết email hủy một lịch đã thống nhất và đề xuất lịch thay thế.",
+    ],
+  ],
+  [
+    "Giải thích một quyết định",
+    "Weil và deshalb",
+    "Weil mở đầu mệnh đề phụ, động từ đã chia đứng cuối. Deshalb đứng đầu câu chính nên ngay sau nó là động từ.",
+    "Tôi chọn lớp buổi tối vì ban ngày tôi đi làm. Vì vậy, tôi cần quãng đường đi học ngắn.",
+    [
+      ["lý do; lập luận giải thích", "Lời giải thích của anh ấy dễ hiểu."],
+      ["cân nhắc", "Chúng tôi cân nhắc ưu và nhược điểm."],
+      ["công sức; chi phí bỏ ra", "Về lâu dài, công sức bỏ ra là xứng đáng."],
+      ["vì vậy", "Khóa học rẻ hơn nên tôi đăng ký."],
+    ],
+    "Ben ưu tiên quãng đường ngắn và cơ hội nói hơn mức giá thấp nhất.",
+    "Xác định lý do đổi phòng và thời gian chậm bắt đầu.",
+    "Dùng một mệnh đề với weil và một câu với deshalb.",
+    "Viết 40–70 từ. Nêu hai tiêu chí và thừa nhận rằng vẫn có lựa chọn khác.",
+    [
+      "Ben ở ngôi thứ ba số ít; sau weil, động từ đã chia đứng cuối mệnh đề.",
+      "Anh ấy muốn có cơ hội nói thường xuyên nên chọn lớp nhỏ gần nhà.",
+      "Hệ thống sưởi hỏng khiến lớp phải đổi phòng và bắt đầu muộn mười phút.",
+    ],
+    [
+      "Chọn một trong hai khóa học và giải thích lý do.",
+      "Giải thích bằng văn bản cho một người bạn vì sao một hình thức học phù hợp với bạn.",
+    ],
+  ],
+  [
+    "Thương lượng một phương án dung hòa",
+    "Obwohl và trotzdem",
+    "Obwohl mở đầu mệnh đề phụ chỉ sự nhượng bộ. Trotzdem mở đầu câu chính và ngay sau nó là động từ. Cả hai diễn tả kết quả trái với điều người ta thường chờ đợi.",
+    "Mặc dù căn phòng nhỏ, tôi vẫn thích nó. Căn phòng nhỏ; tuy vậy, tôi vẫn thích nó.",
+    [
+      [
+        "sự thỏa hiệp; phương án dung hòa",
+        "Chúng tôi tìm được một phương án dung hòa khả thi.",
+      ],
+      [
+        "sự quan tâm, ý tứ với người khác",
+        "Chúng tôi chú ý không làm phiền hàng xóm.",
+      ],
+      [
+        "khẳng định; thực hiện bằng được",
+        "Không phải ai cũng có thể làm theo ý riêng.",
+      ],
+      [
+        "nhượng bộ; đáp ứng một phần",
+        "Chủ nhà đã nhượng bộ và đáp ứng chúng tôi phần nào.",
+      ],
+    ],
+    "Những người ở chung thống nhất giờ tập và dùng tai nghe thay vì cấm âm nhạc hoàn toàn.",
+    "Phân biệt dịch vụ vẫn mở với dịch vụ chuyển sang nơi khác.",
+    "Nêu nhu cầu của cả hai bên rồi mới đề xuất giải pháp. Dùng obwohl hoặc trotzdem.",
+    "Viết 50–80 từ. Tránh chỉ đổ lỗi cho một người; có ý nhượng bộ.",
+    [
+      "Trotzdem chiếm vị trí thứ nhất, ngay sau đó là động từ gefällt.",
+      "Họ chọn một phương án dung hòa mà họ thấy tốt hơn lệnh cấm hoàn toàn.",
+      "Phòng đọc đang sửa chữa nhưng dịch vụ mượn sách vẫn hoạt động.",
+    ],
+    [
+      "Thương lượng cách cân bằng giữa nhu cầu yên tĩnh và hoạt động chung trong nhà ở ghép.",
+      "Mô tả một xung đột và đề xuất giải pháp có tính đến cả hai phía.",
+    ],
+  ],
+  [
+    "Ôn tập qua một hoạt động cộng đồng",
+    "Kết nối sự kiện quá khứ với lý do",
+    "Kết hợp sự kiện đã xảy ra, lý do và ý nhượng bộ. Câu chính có trợ động từ Perfekt ở vị trí thứ hai; mệnh đề phụ có động từ ở cuối.",
+    "Lễ hội vẫn diễn ra mặc dù hai người hỗ trợ không tham gia được.",
+    [
+      ["sự tham gia", "Lễ hội khu phố có nhiều người tham gia."],
+      ["đáng tin cậy", "Chúng tôi cần hai người hỗ trợ đáng tin cậy."],
+      ["đảm nhận", "Tôi sẽ phụ trách đồ uống."],
+      ["bị hủy; không hoạt động; vắng mặt", "Buổi hòa nhạc bị hủy vì bão."],
+    ],
+    "Lễ hội thành công dù thiếu người; nhóm rút ra rằng cần phân công rõ ràng hơn.",
+    "Nghe mục đích của cuộc họp và hai loại đóng góp mỗi người cần chuẩn bị.",
+    "Dùng Perfekt, một lý do và một ý nhượng bộ.",
+    "Viết 50–80 từ. Có thành công, khó khăn, dẫn chứng và một bước cải thiện cụ thể.",
+    [
+      "Ausfallen trong nghĩa này tạo Perfekt bằng sein.",
+      "Nhóm dự định lập danh sách trách nhiệm vì việc phân công chưa rõ.",
+      "Người nói nêu rõ không tìm người để trách mà muốn có đề xuất cải thiện.",
+    ],
+    [
+      "Tóm tắt một sự kiện đã cùng tổ chức và nêu một điểm cần cải thiện.",
+      "Viết bản đánh giá ngắn về một lễ hội hoặc dự án học tập để gửi nhóm.",
+    ],
+  ],
+  [
+    "Nhờ giúp đỡ một cách lịch sự",
+    "Konjunktiv II trong lời đề nghị lịch sự",
+    "Könnten, würden và hätten giúp lời đề nghị nhẹ nhàng hơn. Würden và könnten đi với động từ nguyên mẫu.",
+    "Quý vị có thể giải thích cho tôi cách nộp đơn được không?",
+    [
+      ["sự hỗ trợ", "Tôi rất biết ơn sự hỗ trợ của quý vị."],
+      ["thông tin giải đáp", "Quý vị có thể cung cấp thông tin cho tôi không?"],
+      ["gấp; khẩn cấp", "Tôi cần giấy chứng nhận gấp."],
+      ["tiếp nhận", "Đồng nghiệp tiếp nhận đơn của tôi."],
+    ],
+    "Sofia lịch sự giải thích hạn chót và được đề nghị chuyển tiếp giấy tờ.",
+    "Xác định giấy tờ còn thiếu và xem có cần đến trực tiếp không.",
+    "Dùng könnten và một câu hỏi gián tiếp.",
+    "Viết 50–80 từ. Nêu mục đích, hạn chót và lời kết lịch sự.",
+    [
+      "Könnten Sie là lời đề nghị lịch sự ở Konjunktiv II, dùng cách xưng hô trang trọng.",
+      "Cô ấy không hứa cấp ngay nhưng có thể chuyển tiếp giấy tờ.",
+      "Người gọi yêu cầu rõ một bản sao giấy tờ tùy thân.",
+    ],
+    [
+      "Nhờ giúp điền biểu mẫu và lịch sự giải thích vì sao bạn cần câu trả lời sớm.",
+      "Viết cho văn phòng khóa học để xin giấy chứng nhận với hạn chót rõ ràng.",
+    ],
+  ],
+  [
+    "Khám phá những phương án giả định",
+    "Điều kiện giả định ở hiện tại",
+    "Dùng wenn với Konjunktiv II và kết quả giả định: hätte, wäre hoặc würde + nguyên mẫu. Đây là tình huống tưởng tượng ở hiện tại, không phải quá khứ đã hoàn tất.",
+    "Nếu có nhiều thời gian rảnh hơn, tôi sẽ tham gia một khóa học cấp tốc.",
+    [
+      ["khả năng; phương án", "Tôi muốn xem xét khả năng này."],
+      ["điều kiện tiên quyết", "Sự linh hoạt là một điều kiện quan trọng."],
+      [
+        "tự tin mình làm được",
+        "Tôi tin mình có thể thuyết trình bằng tiếng Đức.",
+      ],
+      ["từ bỏ", "Tôi không bỏ cuộc ngay khi gặp khó khăn."],
+    ],
+    "Felix cân nhắc tham gia dự án quốc tế tại địa phương như một bước ít rủi ro hơn trước khi sống ở nước ngoài.",
+    "Phân biệt buổi thông tin miễn phí với dịch vụ cần đặt trước.",
+    "Thêm một bước nhỏ, thực tế mà bạn có thể làm ngay.",
+    "Viết 50–80 từ. Dùng wenn + Konjunktiv II và nêu một giới hạn thực tế.",
+    [
+      "Hätte biểu thị điều kiện không có thật hoặc được tưởng tượng ở hiện tại.",
+      "Dự án địa phương giúp anh ấy có kinh nghiệm mà không phải bỏ công việc hiện tại.",
+      "Buổi thông tin miễn phí; tư vấn riêng cần đặt trước.",
+    ],
+    [
+      "Bạn sẽ thay đổi lịch học như thế nào nếu thời gian và tiền bạc không phải vấn đề?",
+      "Mô tả một kế hoạch giả định và một phương án thực tế hơn.",
+    ],
+  ],
+  [
+    "Mô tả người một cách chính xác",
+    "Mệnh đề quan hệ ở Nominativ và Akkusativ",
+    "Giống và số của đại từ quan hệ theo danh từ được nói tới, nhưng cách ngữ pháp do vai trò của nó trong mệnh đề quan hệ quyết định. Động từ đứng cuối.",
+    "Đó là người đồng nghiệp phụ trách khóa học và được tôi rất quý trọng.",
+    [
+      ["sự hợp tác", "Việc hợp tác với nhóm diễn ra tốt."],
+      ["phụ trách; chịu trách nhiệm", "Ai phụ trách đăng ký?"],
+      ["khả năng; năng lực", "Lắng nghe là một năng lực quan trọng."],
+      [
+        "truyền đạt; làm trung gian",
+        "Cô ấy giải thích nội dung phức tạp một cách rõ ràng.",
+      ],
+    ],
+    "Jana hỗ trợ học viên và khuyến khích họ dùng năng lực của mình khi làm tình nguyện.",
+    "Xác định vai trò chính và phẩm chất người nói coi trọng nhất.",
+    "Dùng hai mệnh đề quan hệ: một đại từ làm chủ ngữ và một đại từ làm tân ngữ trực tiếp.",
+    "Viết 50–80 từ. Nêu một hành động cụ thể và tác động đến người khác.",
+    [
+      "Người tham gia là tân ngữ của unterstützt trong mệnh đề quan hệ nên phải dùng den, Akkusativ giống đực.",
+      "Câu cuối nhấn mạnh việc giúp người khác phát huy năng lực.",
+      "Việc bố trí phòng đã có người lo; người mới cần gợi mở hội thoại và giúp khách hòa nhập.",
+    ],
+    [
+      "Giới thiệu một người có công việc mà bạn trân trọng và giải thích nhiệm vụ của họ.",
+      "Viết chân dung ngắn về một đồng nghiệp hữu ích hoặc một bạn học.",
+    ],
+  ],
+  [
+    "Xây dựng quan hệ bằng ngôn ngữ",
+    "Mệnh đề quan hệ có giới từ",
+    "Đặt giới từ cần dùng trước đại từ quan hệ. Cách ngữ pháp theo giới từ: mit + Dativ; sich verlassen auf + Akkusativ.",
+    "Đó là người hàng xóm tôi thường trò chuyện cùng và có thể tin cậy.",
+    [
+      ["mối quan hệ", "Quan hệ tốt không tự nhiên mà có."],
+      ["tin tưởng", "Tôi tin người hàng xóm của mình."],
+      ["chú ý; chu đáo", "Người lắng nghe chăm chú sẽ đặt câu hỏi tiếp."],
+      ["trao đổi", "Trao đổi với người khác giúp mở rộng góc nhìn của tôi."],
+    ],
+    "Một lời nhờ nhỏ đưa Rania đến dự án làm vườn và những mối quan hệ biết hỗ trợ nhau.",
+    "Nghe mục đích của quán cà phê và loại đồ không được đem đến trao đổi.",
+    "Có một mệnh đề quan hệ với mit và một mệnh đề với auf.",
+    "Viết 50–80 từ. Nêu hoàn cảnh, hành động và điều thay đổi sau đó.",
+    [
+      "Mit yêu cầu Dativ; dạng giống cái là der.",
+      "Cô ấy biết dự án khi giúp hàng xóm tìm chuyến xe buýt nối tiếp.",
+      "Quán không có chỗ cho đồ nội thất lớn.",
+    ],
+    [
+      "Mô tả một người mà bạn có thể tin cậy.",
+      "Viết về một cuộc gặp nhỏ đã tạo ra một mối liên hệ hữu ích.",
+    ],
+  ],
+  [
+    "Nhắc lại ý mà không lặp từ",
+    "Trạng từ đại từ: da- và wo-",
+    "Dùng darauf, damit hoặc davon để nhắc đến sự vật, tình huống sau động từ đi với giới từ. Khi hỏi dùng worauf, womit, wovon. Với người, dùng giới từ + đại từ.",
+    "Tôi mong chờ khóa học. Bạn mong chờ điều gì? Mong được làm quen người mới.",
+    [
+      ["sự chuẩn bị", "Chuẩn bị tốt giúp giảm căng thẳng."],
+      ["tìm hiểu; tập trung vào", "Tôi đang tìm hiểu các phương pháp học mới."],
+      ["gợi ý; dấu hiệu", "Gợi ý này đã giúp tôi."],
+      ["phụ thuộc", "Thành công phụ thuộc vào nhiều yếu tố."],
+    ],
+    "Yusuf chuyển trọng tâm từ tránh mắc lỗi sang đưa ví dụ rõ ràng, phù hợp với người nghe.",
+    "Xác định học viên cần chuẩn bị gì và việc nào chưa cần làm.",
+    "Dùng ít nhất hai trạng từ đại từ khác nhau.",
+    "Viết 50–80 từ. Dùng daran, dabei hoặc davon với đối tượng được nhắc lại rõ ràng.",
+    [
+      "Sich beschäftigen mit ở đây nói về một việc nên dùng damit để dẫn ý tiếp theo.",
+      "Bài đối chiếu việc học thuộc mọi câu với việc chuẩn bị ví dụ và từ khóa.",
+      "Thông báo yêu cầu ba từ khóa và nói chưa cần chuẩn bị bài thuyết trình hoàn chỉnh.",
+    ],
+    [
+      "Giải thích bạn mong đợi điều gì ở khóa học tới và chuẩn bị bằng cách nào.",
+      "Mô tả cách chuẩn bị cho một bài nói ngắn và điều bạn đặc biệt chú ý.",
+    ],
+  ],
+  [
+    "So sánh thói quen và kết quả",
+    "Cấu trúc càng… càng…: je … desto …",
+    "Je mở đầu mệnh đề phụ so sánh với động từ ở cuối. Desto + dạng so sánh hơn đứng đầu câu chính, ngay sau đó là động từ đã chia.",
+    "Càng nói tự do thường xuyên, tôi càng tự tin.",
+    [
+      ["sự phát triển", "Tôi theo dõi sự tiến bộ của mình trong vài tuần."],
+      ["tiến triển", "Dự án đang tiến triển chậm."],
+      ["rõ ràng; dễ theo dõi", "Một bảng rõ ràng giúp việc so sánh dễ hơn."],
+      ["sự bền bỉ", "Sự bền bỉ rất quan trọng khi học ngoại ngữ."],
+    ],
+    "Một nhóm đổi cách đo tiến bộ: không chỉ đếm từ mà chú ý việc dùng từ có ý nghĩa và tự phát.",
+    "Nghe thời lượng phần nói và hai nội dung cần tự đánh giá.",
+    "Tạo hai câu je … desto với hai cặp so sánh hơn khác nhau.",
+    "Viết 50–80 từ. Có ví dụ và nêu giới hạn của việc chỉ đếm số lượng.",
+    [
+      "Sau desto sicherer, động từ werde đứng trước chủ ngữ ich.",
+      "Họ nhận ra số từ ghi lại không cho biết dùng được chúng tốt đến đâu.",
+      "Toàn bộ hoạt động dài hai phút, nhưng phần nói tự do chỉ dài một phút.",
+    ],
+    [
+      "Mô tả mối liên hệ giữa một thói quen học và kết quả của nó.",
+      "Giải thích ngắn gọn bạn nhận ra sự tiến bộ thực chất bằng cách nào.",
+    ],
+  ],
+  [
+    "Kết hợp và cân bằng lập luận",
+    "Vừa… vừa…; tuy… nhưng… (sowohl … als auch; zwar … aber)",
+    "Sowohl … als auch nối hai thành phần song song. Zwar … aber thừa nhận một điểm rồi nêu ý đối lập. Các vế với zwar/aber vẫn theo trật tự câu chính.",
+    "Khóa học có cả đọc lẫn nghe. Khóa học tuy đắt nhưng rất linh hoạt.",
+    [
+      ["hạn chế", "Chương trình có một số hạn chế."],
+      ["đa dạng", "Khóa học có các hoạt động đa dạng."],
+      ["tính đến; cân nhắc", "Chúng tôi tính đến các nhu cầu khác nhau."],
+      [
+        "quyền truy cập; khả năng tiếp cận",
+        "Quyền truy cập học liệu vẫn miễn phí.",
+      ],
+    ],
+    "Nhóm thảo luận kết hợp trực tiếp và trực tuyến giúp dễ tham gia hơn nhưng cần điều phối để người ở xa cũng có tiếng nói.",
+    "Phân biệt phần bài tập linh hoạt với lịch hẹn cố định hằng tuần.",
+    "Dùng cả sowohl … als auch và zwar … aber, mỗi cấu trúc một lần.",
+    "Viết 50–80 từ. Giải thích ai phù hợp với hình thức này và ai có thể cần hình thức khác.",
+    [
+      "Zwar đi với aber để thừa nhận lợi ích trước khi nêu hạn chế.",
+      "Người điều phối bổ sung bảo đảm học viên từ xa cũng có cơ hội nói.",
+      "Chỉ bài tập văn bản được làm bất cứ lúc nào; thảo luận chung diễn ra vào thứ Hai.",
+    ],
+    [
+      "So sánh học trực tiếp và học trực tuyến, tránh chỉ khen một phía.",
+      "Viết lời khuyên chọn hình thức học và đồng thời nêu một hạn chế.",
+    ],
+  ],
+  [
+    "Hiểu quy trình của một dịch vụ",
+    "Bị động quá trình ở hiện tại",
+    "Dùng werden + phân từ II để nhấn mạnh hành động hoặc quá trình. Động từ đã chia theo chủ ngữ của câu bị động. Có thể không nêu người thực hiện.",
+    "Giấy tờ được kiểm tra; sau đó đơn được xử lý.",
+    [
+      ["quy trình", "Quy trình này kéo dài vài phút."],
+      ["kiểm tra; xem xét", "Nhân viên kiểm tra thông tin."],
+      ["xử lý", "Đơn được xử lý trong vòng một tuần."],
+      ["xác nhận", "Bạn sẽ nhận được xác nhận bằng văn bản."],
+    ],
+    "Dịch vụ minh bạch hơn nhờ xác nhận đã nhận hồ sơ và cấp mã tham chiếu.",
+    "Xác định thông báo xác nhận điều gì và chưa xác nhận điều gì.",
+    "Dùng ít nhất hai câu bị động hiện tại.",
+    "Viết 50–80 từ. Nêu ba bước theo thứ tự và cách hỏi thêm thông tin.",
+    [
+      "Angaben là số nhiều nên bị động hiện tại dùng werden.",
+      "Mã số giúp hỏi thông tin chính xác hơn; bài không hứa chắc được duyệt hay xử lý nhanh tự động.",
+      "Người nói nêu rõ xác nhận đã nhận hồ sơ chưa phải là phê duyệt.",
+    ],
+    [
+      "Giải thích một thủ tục hành chính đơn giản mà không cần nêu từng người thực hiện.",
+      "Mô tả cho học viên mới cách xử lý đăng ký.",
+    ],
+  ],
+  [
+    "Báo cáo quy trình đã thực hiện",
+    "Bị động quá trình ở quá khứ",
+    "Bị động Präteritum dùng wurde/wurden + phân từ II. Bị động Perfekt dùng ist/sind + phân từ II + worden. Trong cấu trúc này phải là worden, không phải geworden.",
+    "Lỗi đã được khắc phục. Khách đã được thông báo về việc đó.",
+    [
+      ["biện pháp; hành động", "Biện pháp được thảo luận trong nhóm."],
+      ["khắc phục; sửa", "Lỗi hiện đã được khắc phục."],
+      ["khiếu nại", "Một số khiếu nại đã được xem xét."],
+      ["tạm thời", "Lối vào đã tạm thời đóng cửa."],
+    ],
+    "Nhà nghỉ đánh giá cả việc sửa chữa lẫn cách thông báo sau sự cố nước nóng.",
+    "Theo dõi lối vào nào đang dùng và thông tin đã được truyền đạt bằng cách nào.",
+    "Dùng wurde và ist … worden trong hai câu riêng.",
+    "Viết 50–80 từ. Có vấn đề, hai biện pháp và một bài học cho việc thông báo sau này.",
+    [
+      "Perfekt của bị động quá trình dùng worden sau phân từ informiert.",
+      "Báo cáo nêu rõ cách thông báo là trọng tâm đánh giá thứ hai.",
+      "Lối vào chính đã sửa xong; lối tạm bên hông đã đóng lại.",
+    ],
+    [
+      "Báo cáo khách quan về một sự cố và các biện pháp đã thực hiện.",
+      "Viết báo cáo ngắn gửi nhóm về một vấn đề đã được xử lý.",
+    ],
+  ],
+  [
+    "Dùng cụm danh từ–động từ trong công việc",
+    "Cụm danh từ–động từ và sắc thái sử dụng",
+    "Học cả danh từ, mạo từ, giới từ và động từ như một cụm. Cụm này thường hợp văn bản công việc, nhưng trong hội thoại một động từ đơn giản có thể rõ hơn.",
+    "Chúng tôi cung cấp giấy tờ và chịu trách nhiệm kiểm tra.",
+    [
+      ["đưa ra quyết định", "Nhóm sẽ đưa ra quyết định vào ngày mai."],
+      ["có sẵn; được sử dụng", "Chúng tôi có hai phòng để sử dụng."],
+      ["sử dụng một dịch vụ", "Bạn có thể sử dụng một buổi tư vấn."],
+      ["trách nhiệm", "Tôi chịu trách nhiệm về quy trình."],
+    ],
+    "Dịch vụ tư vấn thử mở thêm một buổi tối trước khi quyết định có đủ khả năng duy trì hay không.",
+    "Nghe ngày hẹn mới và điều kiện sử dụng dịch vụ.",
+    "Dùng chính xác hai cụm danh từ–động từ, tránh cố nhét vào mọi câu.",
+    "Viết 50–80 từ. Giải thích thời gian phục vụ, cách đặt lịch và trách nhiệm.",
+    [
+      "Cụm dùng thông thường là eine Entscheidung treffen.",
+      "Tháng thử nghiệm kiểm tra nhân sự và nhu cầu thực tế có phù hợp dịch vụ mới không.",
+      "Thông báo đặt điều kiện phải đăng ký trước để dùng buổi tư vấn bổ sung.",
+    ],
+    [
+      "Giới thiệu một dự án nhỏ và phân chia trách nhiệm.",
+      "Viết thông tin dự án ngắn gọn, khách quan về một dịch vụ tư vấn mới.",
+    ],
+  ],
+  [
+    "Giao tiếp tại nơi làm việc",
+    "Câu hỏi gián tiếp",
+    "Câu hỏi gián tiếp bắt đầu bằng từ để hỏi hoặc ob. Động từ đã chia đứng cuối mệnh đề. Ob dẫn câu hỏi có/không.",
+    "Quý vị có thể giải thích hạn chót có áp dụng cả cho giấy tờ nội bộ không?",
+    [
+      ["câu hỏi làm rõ", "Khi chưa rõ điều gì, tôi đặt câu hỏi làm rõ."],
+      ["hiểu; theo dõi được lập luận", "Tôi hiểu được cách lập luận của bạn."],
+      ["mơ hồ; dễ gây hiểu lầm", "Cách diễn đạt đó dễ gây hiểu lầm."],
+      ["ghi lại; lưu giữ", "Chúng tôi ghi lại kết quả bằng văn bản."],
+    ],
+    "Mai làm rõ phạm vi nhiệm vụ trước khi bắt đầu, nhờ đó tránh việc không cần thiết.",
+    "Xác định báo cáo nào cần ngay và việc nào để sau.",
+    "Có một câu hỏi gián tiếp với từ để hỏi và một câu với ob.",
+    "Viết 50–80 từ. Nêu điều đã hiểu, điểm còn chưa rõ và đề xuất bước tiếp theo.",
+    [
+      "Câu hỏi gián tiếp dạng có/không dùng ob, đưa gilt xuống cuối.",
+      "Quản lý giải thích trước mắt chỉ cần những hạng mục còn tồn.",
+      "Đánh giá cả năm được lên lịch vào tháng sau, không phải cho cuộc họp trước mắt.",
+    ],
+    [
+      "Lịch sự hỏi lại khi một hướng dẫn công việc chưa rõ.",
+      "Viết cho trưởng nhóm để làm rõ một nhiệm vụ còn mơ hồ.",
+    ],
+  ],
+  [
+    "Thảo luận lựa chọn bền vững",
+    "Mệnh đề nguyên mẫu có zu",
+    "Nhiều động từ và cách diễn đạt đi với zu + nguyên mẫu khi có cùng hoặc ngầm hiểu chủ ngữ. Động từ tách chèn zu giữa tiền tố và thân: einzukaufen.",
+    "Trước khi mua mới, nên xem xét khả năng sửa chữa.",
+    [
+      ["tác động; hậu quả", "Thói quen của chúng ta ảnh hưởng đến môi trường."],
+      ["tránh", "Chúng tôi cố tránh bao bì không cần thiết."],
+      ["dài hạn; về lâu dài", "Về lâu dài, việc sửa chữa là xứng đáng."],
+      [
+        "việc mua sắm; món mua mới",
+        "Trước khi mua, tôi xem xét các phương án khác.",
+      ],
+    ],
+    "Ina biết đến khả năng sửa đồ và chọn cách mua sắm có cân nhắc hơn.",
+    "Xác định điều gì cần đăng ký trước và ban tổ chức không thể bảo đảm điều gì.",
+    "Nêu một giới hạn và một lợi ích về lâu dài.",
+    "Viết 50–80 từ. Có zu + nguyên mẫu; tránh khẳng định tuyệt đối rằng ai cũng phải làm giống nhau.",
+    [
+      "Sau zu, động từ giữ nguyên mẫu: vermeiden.",
+      "Quán sửa chữa xác định chỉ có một linh kiện nhỏ cần thay.",
+      "Thông báo nêu rõ không thể bảo đảm sửa thành công.",
+    ],
+    [
+      "Cân nhắc sửa chữa hay mua mới qua một ví dụ cụ thể.",
+      "Viết đoạn ngắn về một lựa chọn bền vững, thực tế trong đời sống.",
+    ],
+  ],
+  [
+    "Sức khỏe và cân bằng sinh hoạt",
+    "Um … zu và damit",
+    "Dùng um … zu để nêu mục đích khi hai hành động có cùng chủ ngữ. Dùng damit khi chủ ngữ khác nhau hoặc cần mệnh đề đầy đủ cho rõ nghĩa.",
+    "Tôi sắp xếp giờ nghỉ để hồi sức. Chúng tôi chia việc để mọi người đều có thể nghỉ.",
+    [
+      ["gánh nặng; áp lực", "Quá nhiều việc nhanh chóng trở thành gánh nặng."],
+      ["hồi phục; nghỉ ngơi", "Sau giờ làm, tôi cần thời gian nghỉ ngơi."],
+      [
+        "hoạt động cân bằng",
+        "Vận động là một cách cân bằng quan trọng với tôi.",
+      ],
+      ["về lâu dài", "Về lâu dài, tôi muốn giảm làm thêm giờ."],
+    ],
+    "Một nhóm thử phân công người thay ca rõ ràng để vẫn nghỉ được dù có yêu cầu gấp.",
+    "Nghe lý do đổi giờ và những gì người tham gia cần mang theo.",
+    "Dùng um … zu một lần và damit một lần với hai chủ ngữ khác nhau rõ ràng.",
+    "Viết 50–80 từ. Tập trung vào cách tổ chức công việc, không đưa ra lời hứa về hiệu quả y tế.",
+    [
+      "Mệnh đề mục đích có chủ ngữ riêng là alle nên dùng damit.",
+      "Thay đổi được thống nhất là có người hỗ trợ đáng tin cậy để mọi người được nghỉ.",
+      "Thông báo giải thích bắt đầu sớm hơn để mọi người về nhà kịp giờ.",
+    ],
+    [
+      "Giải thích hai cách khả thi để cân bằng công việc và nghỉ ngơi.",
+      "Viết đề xuất cho nhóm về cách tổ chức giờ nghỉ tốt hơn.",
+    ],
+  ],
+  [
+    "Nêu quan điểm về đời sống số",
+    "Einerseits … andererseits: một mặt… mặt khác…",
+    "Cặp này triển khai hai góc nhìn. Mỗi vế là câu chính nên động từ đã chia đứng ngay sau từ nối.",
+    "Một mặt, tin nhắn giúp hợp tác; mặt khác, chúng làm gián đoạn sự tập trung.",
+    [
+      [
+        "sự xao nhãng",
+        "Thông báo là một nguyên nhân gây xao nhãng thường xuyên.",
+      ],
+      ["có ý thức; chủ động", "Tôi chủ động quyết định lúc nào đọc tin nhắn."],
+      [
+        "khả năng liên lạc được",
+        "Luôn luôn liên lạc được không phải lúc nào cũng hữu ích.",
+      ],
+      ["giới hạn", "Tôi giới hạn số lượng thông báo."],
+    ],
+    "Một nhóm đặt khung giờ trả lời nhưng vẫn giữ kênh điện thoại cho việc khẩn cấp thực sự.",
+    "Xác định ai tham gia thử nghiệm và kênh liên lạc nào vẫn dùng cho việc gấp.",
+    "Dùng einerseits … andererseits và một ví dụ cụ thể.",
+    "Viết 50–80 từ. Có lợi ích, rủi ro và một ngoại lệ thực tế.",
+    [
+      "Andererseits ở vị trí thứ nhất nên theo sau là động từ lenken; ab ở cuối câu.",
+      "Bài giữ liên lạc bằng điện thoại cho việc thực sự khẩn cấp.",
+      "Thông báo nói sẽ lấy phản hồi sau hai tuần.",
+    ],
+    [
+      "Nhân viên có nên luôn sẵn sàng liên lạc không? Nêu hai góc nhìn và quan điểm của bạn.",
+      "Viết đoạn trao đổi trên diễn đàn về việc quy định giờ đọc, trả lời tin nhắn.",
+    ],
+  ],
+  [
+    "Chọn nguồn học một cách có suy xét",
+    "Thuật lại thông tin mà không khẳng định quá mức",
+    "Dùng laut + Dativ hoặc nach Angaben + Genitiv để nêu nguồn của một nhận định. Phân biệt thông tin nguồn đưa ra với suy luận của chính bạn.",
+    "Theo báo cáo, nhiều người dùng thư viện hơn; điều đó không tự động có nghĩa ai cũng đọc nhiều hơn.",
+    [
+      ["nguồn thông tin", "Tôi kiểm tra nguồn của một nhận định."],
+      ["nhận định; khẳng định", "Không có bằng chứng cho nhận định này."],
+      ["kiểm chứng", "Các chi tiết có thể kiểm chứng dễ dàng."],
+      ["đáng tin cậy", "Nguồn đáng tin nêu ngày và tác giả."],
+    ],
+    "Nico học cách phân biệt tiêu đề hấp dẫn với nghiên cứu nhỏ dựa trên tự đánh giá.",
+    "Nghe con số được đính chính và nơi đăng phần đính chính.",
+    "Phân biệt bằng chứng, ý kiến và câu hỏi còn bỏ ngỏ.",
+    "Viết 50–80 từ. Nêu nguồn của một nhận định và chỉ ra một hạn chế.",
+    [
+      "Laut cho biết nguồn thông tin; dem Bericht là Dativ.",
+      "Báo cáo chi tiết cho thấy mẫu nhỏ và tự đánh giá, không phải lời bảo đảm thành công cho tất cả.",
+      "Phần đính chính thay rõ zweihundert, hai trăm, bằng zwanzig, hai mươi.",
+    ],
+    [
+      "Kiểm tra một quảng cáo khóa học: bạn sẽ yêu cầu thông tin gì?",
+      "Viết lời giới thiệu thận trọng về một hình thức học có dữ liệu còn hạn chế.",
+    ],
+  ],
+  [
+    "Xử lý khiếu nại trang trọng",
+    "Từ nối trang trọng: da và daher",
+    "Da dẫn lý do trong mệnh đề phụ; daher dẫn hệ quả trong câu chính. Đề nghị cần cụ thể và trung tính.",
+    "Vì thiết bị không hoạt động, tôi đề nghị kiểm tra. Do đó, tôi gửi quý vị chứng từ mua hàng.",
+    [
+      ["khiếm khuyết; lỗi", "Tôi muốn báo một khiếm khuyết."],
+      [
+        "hoàn tiền; hoàn trả chi phí",
+        "Tôi đề nghị hoàn lại các chi phí phát sinh.",
+      ],
+      ["chứng minh bằng giấy tờ", "Hóa đơn chứng minh việc thanh toán."],
+      ["phù hợp; hợp lý", "Tôi cho rằng có thể tìm giải pháp hợp lý."],
+    ],
+    "Elena đưa bằng chứng cụ thể và yêu cầu giải pháp thay vì cáo buộc chung chung.",
+    "Phân biệt khoản đã hoàn với khoản chi phí còn được xem xét.",
+    "Nêu điều đã được cam kết, việc thực tế xảy ra và cách xử lý bạn mong muốn.",
+    "Viết 60–90 từ. Có bằng chứng, tác động, yêu cầu hợp lý và lời kết trang trọng.",
+    [
+      "Chủ ngữ số ít der Raum dùng war, đặt cuối mệnh đề với da.",
+      "Cô ấy nêu các khung giờ bị ảnh hưởng và đính kèm xác nhận đặt chỗ.",
+      "Phí hội thảo đã hoàn một phần, nhưng chi phí đi lại vẫn cần chứng từ.",
+    ],
+    [
+      "Báo một lỗi một cách khách quan và đưa ra đề nghị cụ thể.",
+      "Viết khiếu nại về dịch vụ khóa học không được cung cấp như thỏa thuận.",
+    ],
+  ],
+  [
+    "Đề xuất một cách thuyết phục",
+    "Điều kiện có thể xảy ra: falls",
+    "Falls dẫn điều kiện có thể xảy ra, với động từ ở cuối mệnh đề. Cách nói này có thể dè dặt hơn việc xem điều kiện là điều chắc sẽ có.",
+    "Nếu đủ người tham gia, chúng tôi sẽ bố trí buổi thứ hai.",
+    [
+      ["lợi ích; tính hữu ích", "Lợi ích của đề xuất là rõ ràng."],
+      [
+        "triển khai; thực hiện",
+        "Trước mắt, chúng tôi triển khai ý tưởng ở quy mô nhỏ.",
+      ],
+      ["điều kiện tiên quyết", "Phân công rõ là điều kiện tiên quyết."],
+      ["đề xuất", "Tôi đề xuất thử trong bốn tuần."],
+    ],
+    "Daria bảo vệ đề xuất bàn hội thoại bằng giai đoạn thử ngắn và kế hoạch xử lý rủi ro rõ ràng.",
+    "Xác định điều đã bảo đảm và điều có thể khiến ngày bắt đầu bị hoãn.",
+    "Nêu lợi ích, nguồn lực, một rủi ro và phương án dự phòng.",
+    "Viết 60–90 từ. Chọn bước đầu đủ nhỏ để thử nghiệm.",
+    [
+      "Sau falls, động từ tách viết liền ở cuối mệnh đề phụ.",
+      "Cô ấy xác định nguy cơ chia việc không đều và đề xuất công khai phân công.",
+      "Phòng đã có; vẫn cần thêm hai người thay phiên điều phối.",
+    ],
+    [
+      "Trình bày đề xuất cho một hoạt động học nhỏ gần bạn.",
+      "Viết cho ban điều hành một câu lạc bộ để đề xuất cải thiện cụ thể.",
+    ],
+  ],
+  [
+    "Tổ chức lập luận rõ ràng",
+    "Hệ quả và giới hạn của suy luận",
+    "Dùng folglich, somit hoặc daher khi kết luận có cơ sở từ ý trước. Chỉ thêm từ nối không làm một khái quát thiếu căn cứ trở nên đúng.",
+    "Số chỗ có hạn; vì vậy, chúng tôi cần cách đăng ký minh bạch.",
+    [
+      [
+        "lập trường; quan điểm",
+        "Tôi có thể giải thích cơ sở cho quan điểm của mình.",
+      ],
+      ["ý kiến phản đối", "Chúng ta nên nghiêm túc xem xét phản đối này."],
+      ["thuyết phục", "Một ví dụ cụ thể có thể thuyết phục người khác."],
+      [
+        "do đó; hệ quả là",
+        "Chi phí tăng; do đó, chúng ta phải lập kế hoạch lại.",
+      ],
+    ],
+    "Người điều phối biến những quan điểm khác nhau thành thảo luận chính xác hơn về khả năng tham gia và từng loại chi phí.",
+    "Xác định ba thành phần mỗi ý kiến cần có.",
+    "Dùng nhận định, lý do, ví dụ và kết luận có giới hạn.",
+    "Viết 60–90 từ. Chứng minh kết luận thay vì chỉ lặp lại ý mở đầu.",
+    [
+      "Folglich ở vị trí thứ nhất, theo sau là động từ brauchen.",
+      "Tách chi phí học liệu và chi phí phòng giúp nhóm xây dựng đề xuất chính xác hơn.",
+      "Người điều phối yêu cầu lý do, ví dụ và một phản đối đối với chính quan điểm của người nói.",
+    ],
+    [
+      "Nêu quan điểm về lớp ngoại ngữ miễn phí và xem xét một ý kiến phản đối lập trường của bạn.",
+      "Viết đoạn nghị luận ngắn về khả năng tiếp cận việc học nâng cao.",
+    ],
+  ],
+  [
+    "Viết email công việc",
+    "Đề nghị gián tiếp với würde + nguyên mẫu",
+    "Lời đề nghị trang trọng có thể dùng Ich würde Sie bitten, … zu …. Viết ngắn gọn để người nhận biết chính xác cần làm gì.",
+    "Tôi xin quý vị xác nhận đã nhận giấy tờ.",
+    [
+      ["tiêu đề thư", "Tiêu đề thư nêu ngắn gọn mục đích của tôi."],
+      [
+        "việc cần đề nghị; mối quan tâm",
+        "Tôi muốn trình bày chính xác điều mình cần.",
+      ],
+      ["đính kèm", "Tôi đính kèm giấy xác nhận tham gia."],
+      ["hạn chót", "Xin lưu ý hạn chót đã nêu."],
+    ],
+    "Amir sắp xếp thư để người nhận xác định được khóa học và hành động cần thực hiện.",
+    "Xác định mã thông tin còn thiếu và lý do cần mã đó.",
+    "Có thông tin người gửi, bối cảnh, yêu cầu và hạn chót.",
+    "Viết 60–90 từ. Có tiêu đề, thông tin nhận diện liên quan, một đề nghị và lời kết phù hợp.",
+    [
+      "Mệnh đề nguyên mẫu có zu cần dùng bestätigen.",
+      "Anh ấy chủ động chọn bằng chứng liên quan thay vì chuyển tiếp tất cả.",
+      "Người gọi giải thích nhiều nhóm dùng cùng tên khóa học.",
+    ],
+    [
+      "Nói một yêu cầu ngắn gọn, rõ ràng với văn phòng khóa học.",
+      "Viết email trang trọng xin giấy xác nhận tham gia.",
+    ],
+  ],
+  [
+    "Theo dõi thảo luận có nhiều người nói",
+    "Đồng ý một phần và nhượng bộ",
+    "Da stimme ich Ihnen teilweise zu và Ich räume ein, dass … phân biệt đồng ý một phần với tán thành hoàn toàn. Hãy nghe kỹ phần sau aber.",
+    "Tôi thừa nhận kế hoạch giúp tiết kiệm thời gian, nhưng cho rằng nó khó với người mới.",
+    [
+      ["sự đồng ý; tán thành", "Cô ấy chỉ đồng ý với một phần đề xuất."],
+      [
+        "không đồng ý; phản bác",
+        "Tôi không hoàn toàn đồng ý với đánh giá này.",
+      ],
+      ["thừa nhận; nhượng bộ", "Anh ấy thừa nhận kế hoạch có nhược điểm."],
+      ["sự quy ý cho đúng người", "Khi ghép nhận định, tôi chú ý người nói."],
+    ],
+    "Học viên nhận ra hiểu nhu cầu không có nghĩa là tán thành giải pháp được đề xuất.",
+    "Ghép đúng người có nhu cầu hội thoại thường xuyên và người muốn tư vấn tự chọn.",
+    "Diễn đạt lại ý, không chỉ nhắc một từ khóa trong bản chép lời.",
+    "Viết 60–90 từ. Thuật đúng từng quan điểm và chỉ ra một điểm giới hạn.",
+    [
+      "Chủ ngữ số ít der Plan yêu cầu hat ở cuối mệnh đề dass.",
+      "Họ nhầm lời bày tỏ sự thông cảm với tán thành trước khi nghe phần giới hạn.",
+      "Leon nêu rõ anh ấy thích lịch linh hoạt nhưng vẫn cần hội thoại thường xuyên.",
+    ],
+    [
+      "Tóm tắt riêng lập trường của Leon và Aylin, rồi nêu điểm chung.",
+      "Viết tóm tắt ngắn một cuộc thảo luận có hai quan điểm khác nhau.",
+    ],
+  ],
+  [
+    "Sắp xếp lại trình tự sự việc",
+    "Nachdem và hành động xảy ra trước một mốc quá khứ",
+    "Dùng Plusquamperfekt cho hành động hoàn tất trước hành động khác trong quá khứ. Trong mệnh đề nachdem, hatte/war + phân từ II ở cuối.",
+    "Sau khi kiểm tra xong giấy tờ, chúng tôi gửi xác nhận.",
+    [
+      ["trình tự", "Thứ tự các bước là yếu tố quyết định."],
+      ["trước đó", "Trước đó tôi đã kiểm tra giấy tờ."],
+      ["hoàn tất; kết thúc", "Chúng tôi đã hoàn thành khâu chuẩn bị."],
+      ["sau đó; bổ sung về sau", "Thông tin được bổ sung sau đó."],
+    ],
+    "Thông báo sửa phòng gây nhầm lẫn vì email thứ hai không nói rõ là thay thế email thứ nhất.",
+    "Phân biệt xác nhận đã nhận biểu mẫu với xác nhận đặt chỗ cuối cùng.",
+    "Dùng nachdem và làm rõ hành động nào xảy ra trước.",
+    "Viết 60–90 từ. Nêu thông tin sai, thông tin đã sửa và hành động người nhận cần làm.",
+    [
+      "Việc kiểm tra hoàn tất trước đó dùng Plusquamperfekt: geprüft hatten.",
+      "Có thông báo sửa nhưng hiệu lực thay thế chưa rõ; một số học viên chỉ đọc thư đầu.",
+      "Chỉ sau khi kiểm tra thanh toán, đơn vị mới gửi xác nhận cuối cùng.",
+    ],
+    [
+      "Kể về tình huống mà thứ tự nhận thông tin có ý nghĩa quan trọng.",
+      "Viết email đính chính, nêu rõ nó thay thế thông tin trước đây.",
+    ],
+  ],
+  [
+    "Cân nhắc một phương án khác trong quá khứ",
+    "Điều kiện trái thực tế trong quá khứ",
+    "Dùng hätte/wäre + phân từ II để hình dung một quá khứ khác. Với động từ khuyết thiếu có thể có hai nguyên mẫu: hätte früher fragen können.",
+    "Nếu đã đọc thông báo thay đổi, tôi đã không đến điểm hẹn cũ.",
+    [
+      ["sự bỏ sót; thiếu sót", "Thiếu sót đã được trao đổi công khai."],
+      ["nhìn lại", "Nhìn lại, tôi sẽ hỏi sớm hơn."],
+      ["tránh; ngăn ngừa", "Một câu hỏi ngắn đã có thể ngăn lỗi đó."],
+      [
+        "điều rút ra; nhận thức mới",
+        "Điều rút ra này giúp chúng tôi ở dự án tiếp theo.",
+      ],
+    ],
+    "Nhóm biến lần bỏ lỡ thông báo thành thay đổi cách liên lạc thay vì chỉ trách một người.",
+    "Xác định cơ hội đã bỏ lỡ và quy tắc cụ thể cho sự kiện lần sau.",
+    "Có một câu giả định quá khứ và một cải thiện cụ thể cho tương lai.",
+    "Viết 60–90 từ. Phân biệt hành động cá nhân với điều kiện của cả hệ thống.",
+    [
+      "Trạng thái trái thực tế dùng wäre … gewesen.",
+      "Họ thống nhất bảng tổng hợp ngắn gọn các quyết định đã chốt.",
+      "Người tổ chức sẽ lấy đăng ký chắc chắn trước một tuần để chọn phòng phù hợp.",
+    ],
+    [
+      "Mô tả lỗi đã qua và hành động thay thế, tránh chỉ tự chỉ trích mình.",
+      "Viết đánh giá dự án ngắn: điều gì đã có thể khác đi và sắp tới nhóm sẽ đổi gì?",
+    ],
+  ],
+  [
+    "Kết hợp các kỹ năng",
+    "Chọn cấu trúc để truyền đạt ý",
+    "Chọn cấu trúc phục vụ nội dung: lý do, nhượng bộ, điều kiện và mệnh đề quan hệ. Dùng chính xác còn bao gồm việc biết lúc nào câu chính ngắn sẽ rõ hơn.",
+    "Dù vẫn còn mắc lỗi, tôi có thể giải thích quan điểm chính xác hơn vì thường xuyên nói tự do.",
+    [
+      [
+        "sự tổng kết; đánh giá",
+        "Cuối tháng, tôi tổng kết một cách trung thực.",
+      ],
+      ["trọng tâm; ưu tiên", "Trọng tâm tiếp theo của tôi là nói tự phát."],
+      [
+        "vận dụng; chuyển sang tình huống mới",
+        "Tôi áp dụng cấu trúc quen vào tình huống mới.",
+      ],
+      ["độc lập; tự mình", "Tôi có thể tự chỉnh sửa bài viết."],
+    ],
+    "Nhóm xem dẫn chứng tiến bộ cụ thể và chọn bước tiếp theo, không mặc nhiên coi hoàn thành hoạt động là đạt trình độ thi.",
+    "Xác định ba câu hỏi tự đánh giá và loại dẫn chứng cần đưa ra.",
+    "Nói 60–90 giây. Kết hợp lý do, nhượng bộ và một ví dụ.",
+    "Viết 70–100 từ. Dẫn chứng cho đánh giá và chọn hai ưu tiên thực tế.",
+    [
+      "Dạng ich mache kết thúc mệnh đề phụ obwohl.",
+      "Họ dùng sản phẩm học thực tế để chọn ưu tiên, không coi việc làm xong hoạt động là chứng chỉ.",
+      "Người nói yêu cầu ví dụ cụ thể để lập kế hoạch, không phải tự chấm một con số.",
+    ],
+    [
+      "Trình bày tổng kết học tập: một tiến bộ cụ thể, một khó khăn và bước tiếp theo.",
+      "Viết thư cho chính mình về việc học trong tháng tới.",
+    ],
+  ],
+];
+export const courseMessages: Record<string, string> = {};
+function add(en: string, vi: string) {
+  courseMessages[en.replace(/\s+/g, " ").trim()] = vi;
+}
+for (const [i, row] of nativeLessons.entries()) {
+  const l = lessons[i];
+  if (!l) continue;
+  const [
+    title,
+    focus,
+    explanation,
+    translation,
+    words,
+    summary,
+    listening,
+    speaking,
+    writing,
+    answers,
+    prompts,
+  ] = row;
+  add(l.title, title);
+  add(l.grammar.focus, focus);
+  add(l.grammar.explanation, explanation);
+  add(l.grammar.translation, translation);
+  for (const [j, w] of words.entries()) {
+    add(l.vocabulary[j].meaning, w[0]);
+    add(l.vocabulary[j].translation, w[1]);
+  }
+  add(l.reading.summary, summary);
+  add(l.listening.task, listening);
+  add(l.speaking.support, speaking);
+  add(l.writing.checklist, writing);
+  for (const [j, a] of answers.entries()) add(l.quiz[j].explanation, a);
+  add(l.speaking.prompt, prompts[0]);
+  add(l.writing.prompt, prompts[1]);
+}

@@ -1,3 +1,4 @@
+import { Localized } from "./features/language/Language";
 import { useState } from "react";
 const lessons = [
   {
@@ -65,126 +66,133 @@ export function ListeningLibrary({
     [play, setPlay] = useState(false);
   const current = lessons.find((x) => x.id === id)!;
   return (
-    <>
-      <div className="page-heading">
-        <span className="eyebrow">REAL VOICES · REAL CONTEXT</span>
-        <h1>
-          Listen beyond the textbook<span>.</span>
-        </h1>
-        <p>
-          Native-speaker video, official exam practice, and publisher resources.
-        </p>
-      </div>
-      <div className="section-heading">
-        <span>
-          {listened.length} of {lessons.length} sources practiced
-        </span>
-        <select
-          aria-label="Listening level"
-          value={filter}
-          onChange={(e) => setFilter(e.target.value)}
-        >
-          <option>All</option>
-          <option>B1</option>
-          <option>B2</option>
-        </select>
-      </div>
-      <div className="listening-grid">
-        <div className="source-list">
-          {lessons
-            .filter((l) => filter === "All" || l.level.includes(filter))
-            .map((l) => (
-              <button
-                className={
-                  "card source-card " + (l.id === id ? "selected" : "")
-                }
-                key={l.id}
-                onClick={() => {
-                  setId(l.id);
-                  setPlay(false);
-                }}
-              >
-                <span className="eyebrow">
-                  {l.level} ·{" "}
-                  {listened.includes(l.id) ? "Practiced" : "Explore"}
-                </span>
-                <h3>{l.title}</h3>
-                <small>{l.source}</small>
-              </button>
-            ))}
-        </div>
-        <article className="card source-detail">
-          <span className="pill">
-            {current.level} · {current.source}
-          </span>
-          <h2>{current.title}</h2>
-          <p>{current.description}</p>
-          {current.video &&
-            (play ? (
-              <iframe
-                title={current.title}
-                src={"https://www.youtube-nocookie.com/embed/" + current.video}
-                referrerPolicy="strict-origin-when-cross-origin"
-                allow="encrypted-media; picture-in-picture; fullscreen"
-                allowFullScreen
-              />
-            ) : (
-              <div className="video-prompt">
-                <span className="orb-play">▶</span>
-                <h3>A little listening goes a long way.</h3>
-                <p>
-                  Loading the player connects to YouTube. You can also open the
-                  source directly.
-                </p>
-                <button
-                  className="button primary"
-                  onClick={() => setPlay(true)}
-                >
-                  Load YouTube player
-                </button>
-              </div>
-            ))}
-          <a
-            className="button secondary"
-            href={current.url}
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Open {current.source} ↗
-          </a>
-          <div className="practice-steps">
-            <h3>A focused, ten-minute session.</h3>
-            <ol>
-              <li>
-                Listen to a short section without subtitles. Note the situation
-                and two main ideas.
-              </li>
-              <li>
-                Listen again with available captions or the official transcript.
-                Collect three useful expressions.
-              </li>
-              <li>
-                Summarize what you heard in German. For exam tasks, check the
-                official answers at the source.
-              </li>
-            </ol>
+    <Localized>
+      {
+        <>
+          <div className="page-heading">
+            <span className="eyebrow">REAL VOICES · REAL CONTEXT</span>
+            <h1>
+              Listen beyond the textbook<span>.</span>
+            </h1>
+            <p>
+              Native-speaker video, official exam practice, and publisher
+              resources.
+            </p>
           </div>
-          <label className="check-label">
-            <input
-              type="checkbox"
-              disabled={blocked}
-              checked={listened.includes(id)}
-              onChange={(e) => mark(id, e.target.checked)}
-            />{" "}
-            I practiced with this source.
-          </label>
-          <p className="micro">
-            Study prompts are authored for this app. Source content and official
-            answers remain with their publishers. If embedding is blocked, use
-            the source link.
-          </p>
-        </article>
-      </div>
-    </>
+          <div className="section-heading">
+            <span>
+              {listened.length} of {lessons.length} sources practiced
+            </span>
+            <select
+              aria-label="Listening level"
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <option>All</option>
+              <option>B1</option>
+              <option>B2</option>
+            </select>
+          </div>
+          <div className="listening-grid">
+            <div className="source-list">
+              {lessons
+                .filter((l) => filter === "All" || l.level.includes(filter))
+                .map((l) => (
+                  <button
+                    className={
+                      "card source-card " + (l.id === id ? "selected" : "")
+                    }
+                    key={l.id}
+                    onClick={() => {
+                      setId(l.id);
+                      setPlay(false);
+                    }}
+                  >
+                    <span className="eyebrow">
+                      {l.level} ·{" "}
+                      {listened.includes(l.id) ? "Practiced" : "Explore"}
+                    </span>
+                    <h3>{l.title}</h3>
+                    <small>{l.source}</small>
+                  </button>
+                ))}
+            </div>
+            <article className="card source-detail">
+              <span className="pill">
+                {current.level} · {current.source}
+              </span>
+              <h2>{current.title}</h2>
+              <p>{current.description}</p>
+              {current.video &&
+                (play ? (
+                  <iframe
+                    title={current.title}
+                    src={
+                      "https://www.youtube-nocookie.com/embed/" + current.video
+                    }
+                    referrerPolicy="strict-origin-when-cross-origin"
+                    allow="encrypted-media; picture-in-picture; fullscreen"
+                    allowFullScreen
+                  />
+                ) : (
+                  <div className="video-prompt">
+                    <span className="orb-play">▶</span>
+                    <h3>A little listening goes a long way.</h3>
+                    <p>
+                      Loading the player connects to YouTube. You can also open
+                      the source directly.
+                    </p>
+                    <button
+                      className="button primary"
+                      onClick={() => setPlay(true)}
+                    >
+                      Load YouTube player
+                    </button>
+                  </div>
+                ))}
+              <a
+                className="button secondary"
+                href={current.url}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Open {current.source} ↗
+              </a>
+              <div className="practice-steps">
+                <h3>A focused, ten-minute session.</h3>
+                <ol>
+                  <li>
+                    Listen to a short section without subtitles. Note the
+                    situation and two main ideas.
+                  </li>
+                  <li>
+                    Listen again with available captions or the official
+                    transcript. Collect three useful expressions.
+                  </li>
+                  <li>
+                    Summarize what you heard in German. For exam tasks, check
+                    the official answers at the source.
+                  </li>
+                </ol>
+              </div>
+              <label className="check-label">
+                <input
+                  type="checkbox"
+                  disabled={blocked}
+                  checked={listened.includes(id)}
+                  onChange={(e) => mark(id, e.target.checked)}
+                />{" "}
+                I practiced with this source.
+              </label>
+              <p className="micro">
+                Study prompts are authored for this app. Source content and
+                official answers remain with their publishers. If embedding is
+                blocked, use the source link.
+              </p>
+            </article>
+          </div>
+        </>
+      }
+    </Localized>
   );
 }
