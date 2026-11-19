@@ -1,6 +1,7 @@
+import { findMaterial } from "./materials";
 import PersonalLibrary from "./PersonalLibrary";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { BookOpen, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import { books, readBookProgress, type BookProgress } from "./catalog";
 import { GermanText } from "../dictionary/Dictionary";
 const PdfReader = lazy(() => import("./PdfReader"));
@@ -11,14 +12,22 @@ export default function Books({
   scope: string;
   onListening: () => void;
 }) {
+  const [readyBook, setReadyBook] = useState<string | null>(null);
   const [refresh, setRefresh] = useState(0),
     [openRequest, setOpenRequest] = useState<{
       file: File;
       ticket: number;
     } | null>(null);
   const key = `deutsch-books-v1:${scope}`;
-  const [selected, setSelected] = useState(books[0].id),
-    [review, setReview] = useState(false),
+  const [selected, setSelected] = useState(() => {
+      try {
+        return (
+          localStorage.getItem(`deutsch-selected-book:${scope}`) || books[0].id
+        );
+      } catch {
+        return books[0].id;
+      }
+    }),
     [storageError, setStorageError] = useState(""),
     [progress, setProgress] = useState(() => {
       try {
@@ -29,6 +38,10 @@ export default function Books({
     });
   const book = books.find((b) => b.id === selected) ?? books[0],
     saved = progress[book.id] ?? { page: 1, notes: "", completed: [] };
+  const review = saved.view === "review";
+  const guide =
+    book.guides.find((g) => g.id === saved.guide && !!g.review === review) ??
+    book.guides.find((g) => !!g.review === review);
   const edit = (patch: Partial<BookProgress>) =>
     setProgress((p) => ({ ...p, [book.id]: { ...saved, ...patch } }));
   useEffect(() => {
@@ -41,41 +54,104 @@ export default function Books({
       );
     }
   }, [key, progress]);
+  useEffect(() => {
+    let active = true;
+    try {
+      localStorage.setItem(`deutsch-selected-book:${scope}`, book.id);
+    } catch {
+      /* Notes expose storage errors separately. */
+    }
+    void findMaterial(scope, book.sha256)
+      .then((material) => {
+        if (active && material)
+          setOpenRequest({
+            file: new File([material.blob], material.name, {
+              type: "application/pdf",
+            }),
+            ticket: Date.now(),
+          });
+      })
+      .catch(() => {});
+    return () => {
+      active = false;
+    };
+  }, [scope, book.id]);
   return (
     <>
       <div className="page-heading">
-        <span className="eyebrow">YOUR BOOKS · B1 PRACTICE</span>
+        <span className="eyebrow">MY LIBRARY · DOCUMENT STUDY</span>
         <h1>
-          Turn a page. Build a skill<span>.</span>
+          Choose a book. Follow its pages<span>.</span>
         </h1>
         <p>
-          Three supplied resources, clear page guides, and a personal PDF reader
-          with German word lookup.
+          Choose one source, open your copy, attempt a task, then check the
+          matching answers and record what you learned. Book study stays
+          separate from the 30-day course.
         </p>
       </div>
-      <div className="book-catalog">
-        {books.map((b) => (
-          <button
-            key={b.id}
-            className={`card book-resource ${selected === b.id ? "selected" : ""}`}
-            aria-pressed={selected === b.id}
-            onClick={() => {
-              setSelected(b.id);
-              setReview(false);
+      <section className="card library-start">
+        <span className="eyebrow">START HERE</span>
+        <h2>One document at a time.</h2>
+        <label className="field-label">
+          Study guide for a supplied document
+          <select
+            value={book.id}
+            onChange={(e) => {
+              setSelected(e.target.value);
             }}
           >
-            <BookOpen size={24} />
-            <span className="eyebrow">B1 · {b.pages} PDF PAGES</span>
-            <h2>{b.title}</h2>
-            <p>{b.subtitle}</p>
-            <span className="micro">
-              {b.id === "klett-teacher"
-                ? "Answers and transcripts · 10 model tests"
-                : "Reading · listening · writing · speaking"}
+            {books.map((b) => (
+              <option key={b.id} value={b.id}>
+                {b.title} — {b.subtitle}
+              </option>
+            ))}
+          </select>
+        </label>
+        <ol className="library-steps">
+          <li>
+            <strong>Open your copy</strong>
+            <span>
+              A saved copy reopens automatically. Otherwise use the PDF reader
+              below.
             </span>
-          </button>
-        ))}
-      </div>
+          </li>
+          <li>
+            <strong>Attempt a task</strong>
+            <span>
+              Choose a skill in the page guide; keep your answer in the notes
+              for this book.
+            </span>
+          </li>
+          <li>
+            <strong>Check and apply</strong>
+            <span>
+              Open the matching key or transcript, explain a mistake and write a
+              new example.
+            </span>
+          </li>
+        </ol>
+        <p className="notice" role="status">
+          {readyBook === book.id
+            ? `Ready: ${book.subtitle}. Page-guide buttons open this exact edition.`
+            : `Guide available: ${book.subtitle}. Open the matching PDF below to enable its page shortcuts.`}
+        </p>
+        <p className="micro">
+          Chat attachments are not automatically installed in this browser. The
+          three supplied documents have page guides; importing a PDF adds
+          searchable text and pattern-based practice, not an automatically
+          rewritten course.
+        </p>
+        <button
+          className="button secondary"
+          onClick={() =>
+            document
+              .getElementById("book-reader")
+              ?.scrollIntoView({ behavior: "smooth" })
+          }
+        >
+          Go to PDF reader
+        </button>
+      </section>
       <section className="card book-guide">
         <div className="section-heading">
           <div>
@@ -105,25 +181,46 @@ export default function Books({
         <div className="book-guide-switch">
           <button
             className={`button ${!review ? "primary" : "secondary"}`}
-            onClick={() => setReview(false)}
+            onClick={() => edit({ view: "study" })}
           >
             Study first
           </button>
           <button
             className={`button ${review ? "primary" : "secondary"}`}
-            onClick={() => setReview(true)}
+            onClick={() => edit({ view: "review" })}
           >
             Review answers & transcripts
           </button>
         </div>
+        <label className="field-label">
+          Task in this document
+          <select
+            value={guide?.id ?? ""}
+            onChange={(e) => edit({ guide: e.target.value })}
+          >
+            {book.guides
+              .filter((g) => !!g.review === review)
+              .map((g) => (
+                <option key={g.id} value={g.id}>
+                  {g.label} · PDF p. {g.page}
+                </option>
+              ))}
+          </select>
+        </label>
         <div className="book-jump-list">
           {book.guides
-            .filter((g) => !!g.review === review)
+            .filter((g) => g.id === guide?.id)
             .map((g) => (
               <div key={g.id}>
                 <button
                   className="button subtle"
-                  onClick={() => edit({ page: g.page })}
+                  disabled={readyBook !== book.id}
+                  onClick={() => {
+                    edit({ page: g.page });
+                    document
+                      .getElementById("book-reader")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
                 >
                   {g.label}
                   <span>PDF p. {g.page}</span>
@@ -132,6 +229,7 @@ export default function Books({
                 <label className="micro">
                   <input
                     type="checkbox"
+                    disabled={readyBook !== book.id}
                     checked={saved.completed.includes(g.id)}
                     onChange={(e) =>
                       edit({
@@ -151,28 +249,33 @@ export default function Books({
           Checklists are personal study records, not exam marks or XP rewards.
         </p>
       </section>
-      <PersonalLibrary
-        scope={scope}
-        refresh={refresh}
-        onOpen={(file) => setOpenRequest({ file, ticket: Date.now() })}
-      />
-      <Suspense fallback={<p role="status">Opening the PDF reader…</p>}>
-        <PdfReader
+      <details className="card library-imports">
+        <summary>Saved imports and document search</summary>
+        <PersonalLibrary
           scope={scope}
-          onStored={() => setRefresh((v) => v + 1)}
-          openRequest={openRequest}
-          book={book}
-          page={saved.page}
-          onPage={(page) => edit({ page })}
-          onIdentify={(id) => {
-            setSelected(id);
-            setReview(false);
-          }}
+          refresh={refresh}
+          onOpen={(file) => setOpenRequest({ file, ticket: Date.now() })}
         />
-      </Suspense>
+      </details>
+      <div id="book-reader">
+        <Suspense fallback={<p role="status">Opening the PDF reader…</p>}>
+          <PdfReader
+            scope={scope}
+            onReady={setReadyBook}
+            onStored={() => setRefresh((v) => v + 1)}
+            openRequest={openRequest}
+            book={book}
+            page={saved.page}
+            onPage={(page) => edit({ page })}
+            onIdentify={(id) => {
+              setSelected(id);
+            }}
+          />
+        </Suspense>
+      </div>
       <div className="book-notes-grid">
         <section className="card">
-          <span className="eyebrow">30-MINUTE STUDY ROUTINE</span>
+          <span className="eyebrow">OPTIONAL BOOK STUDY</span>
           <h2>A focused session.</h2>
           <ol>
             <li>
@@ -192,9 +295,9 @@ export default function Books({
           <p>
             Track who says what, rather than matching isolated words. On the
             first pass, identify viewpoints; on the second, verify the evidence.
-            Then consult the matching transcript. Use the existing three-pass
-            studio for further intensive practice with a recording and timed
-            captions you may use.
+            Then consult the matching transcript. The optional three-pass studio
+            uses its own imported recording and captions. It does not
+            automatically receive this PDF or its audio.
           </p>
           <button className="button secondary" onClick={onListening}>
             Open listening studio
@@ -224,12 +327,13 @@ export default function Books({
             </p>
           )}
           <p className="micro">
-            Saved on this device, separately for each account. PDF bytes are not
-            saved. Notes do not sync to the cloud.
+            Saved on this device, separately for each account. Imported PDFs are
+            saved in this browser. Notes do not sync to the cloud.
           </p>
         </section>
       </div>
-      <section className="card book-transfer">
+      <details className="card book-transfer">
+        <summary>Optional original transfer prompts</summary>
         <span className="eyebrow">
           ORIGINAL TRANSFER TASK · NOT AN EXAM QUESTION
         </span>
@@ -254,7 +358,7 @@ export default function Books({
           place the conjugated verb correctly? These prompts are authored for
           this app and are not copied from the supplied exams.
         </p>
-      </section>
+      </details>
     </>
   );
 }

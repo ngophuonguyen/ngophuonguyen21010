@@ -18,10 +18,12 @@ export default function PdfReader({
   onIdentify,
   scope,
   onStored,
+  onReady,
   openRequest,
 }: {
   scope: string;
   onStored: () => void;
+  onReady: (bookId: string | null) => void;
   openRequest: { file: File; ticket: number } | null;
   book: Book;
   page: number;
@@ -46,8 +48,8 @@ export default function PdfReader({
     generation = useRef(0),
     canvas = useRef<HTMLCanvasElement>(null),
     input = useRef<HTMLInputElement>(null),
-    callbacks = useRef({ onPage, onIdentify });
-  callbacks.current = { onPage, onIdentify };
+    callbacks = useRef({ onPage, onIdentify, onReady });
+  callbacks.current = { onPage, onIdentify, onReady };
   useEffect(
     () => () => {
       generation.current++;
@@ -68,6 +70,7 @@ export default function PdfReader({
       setLines([]);
       setVerified(null);
       setFileName("");
+      callbacks.current.onReady(null);
     }
   }, [book.id]);
   async function openFile(file: File) {
@@ -76,6 +79,7 @@ export default function PdfReader({
     const abort = new AbortController();
     importAbort.current = abort;
     setIndexStatus("");
+    callbacks.current.onReady(null);
     void task.current?.destroy();
     task.current = null;
     setPdf(null);
@@ -115,6 +119,7 @@ export default function PdfReader({
       }
       setVerified(known?.id ?? null);
       setPdf(doc);
+      callbacks.current.onReady(known?.id ?? null);
       if (known) callbacks.current.onIdentify(known.id);
       else callbacks.current.onPage(1);
       setLoading(false);

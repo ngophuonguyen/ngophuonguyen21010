@@ -159,7 +159,13 @@ export const identifyBook = (sha: string) =>
   books.find((b) => b.sha256 === sha);
 export const clampPage = (value: number, total: number) =>
   Math.max(1, Math.min(total, Number.isFinite(value) ? Math.floor(value) : 1));
-export type BookProgress = { page: number; notes: string; completed: string[] };
+export type BookProgress = {
+  page: number;
+  notes: string;
+  completed: string[];
+  guide?: string;
+  view?: "study" | "review";
+};
 export function readBookProgress(
   raw: string | null,
 ): Record<string, BookProgress> {
@@ -171,6 +177,10 @@ export function readBookProgress(
       const p = data[b.id];
       if (!p || typeof p !== "object") continue;
       out[b.id] = {
+        ...(b.guides.some((g) => g.id === p.guide)
+          ? { guide: p.guide as string }
+          : {}),
+        ...(p.view === "study" || p.view === "review" ? { view: p.view } : {}),
         page: clampPage(p.page, b.pages),
         notes: typeof p.notes === "string" ? p.notes.slice(0, 6000) : "",
         completed: Array.isArray(p.completed)

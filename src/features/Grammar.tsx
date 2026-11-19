@@ -55,8 +55,9 @@ export default function Grammar({
           A little structure. More freedom<span>.</span>
         </h1>
         <p>
-          Five foundation checks shared across the learning plan. Explore
-          contextual grammar in the reading studio.
+          Five independent foundation checks. Each course day has its own
+          grammar and questions; this optional quiz does not complete a course
+          day.
         </p>
       </div>
       <section className="card quiz-card">

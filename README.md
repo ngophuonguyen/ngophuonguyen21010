@@ -18,6 +18,14 @@ npm run preview
 
 The GitHub Actions workflow tests, builds and deploys `dist/` after a push to `main`. Enable **Settings → Pages → GitHub Actions** once.
 
+## Start here
+
+The main journey is **Today → daily lesson → Review my lessons**. The five primary destinations are Today, 30-day course, My library, Review my lessons and Practice tools. URLs retain the selected page/day across reloads and browser Back/Forward. Today resumes the last unfinished opened lesson, or the first unfinished day after completion.
+
+Practice tools preserves the existing four-step vocabulary batch, three-pass listening studio, interactive reading, foundation grammar, studio flashcards and practice ranks. These independent tools do not complete a course day. Course review shows the student's actual saved day responses and drafts rather than the studio's six flashcards.
+
+My library follows **one source → one task → PDF evidence → notes and review**. The selected source, task and study/review mode persist per account on this device. A previously indexed matching copy reopens from IndexedDB. Exact-edition page shortcuts are disabled until that source is open. All three supplied documents have page guides; the authored daily course has not been automatically generated from those documents. Importing a local PDF indexes its text and offers rule-based practice. Chat attachments are not automatically installed in a visitor's browser.
+
 ## Learning experience
 
 - A complete six-word batch with gender, plural, collocations and four bilingual examples per word.
