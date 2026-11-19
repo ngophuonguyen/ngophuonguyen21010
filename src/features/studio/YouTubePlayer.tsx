@@ -1,3 +1,4 @@
+import { Localized } from "../language/Language";
 import { useEffect, useRef, useState } from "react";
 import { addRange, coveredSeconds, formatTime, type Cue } from "./model";
 type Player = {
@@ -98,7 +99,10 @@ export default function YouTubePlayer({
     let disposed = false,
       player: Player | null = null,
       timer: ReturnType<typeof setInterval> | undefined,
-      last: { position: number; wall: number } | null = null,
+      last: {
+        position: number;
+        wall: number;
+      } | null = null,
       ranges: [number, number][] = [];
     let actualSeconds = 0,
       reported = false;
@@ -209,38 +213,42 @@ export default function YouTubePlayer({
     };
   }, [videoId, cues, retry]);
   return (
-    <section className="youtube-study-player">
-      <div ref={host} className="youtube-study-stage" />
-      {!ready && !error && <p role="status">Loading YouTube player…</p>}
-      <div className="section-heading">
-        <span className="micro">
-          Transcript segment: {formatTime(cues[0].start)}–
-          {formatTime(cues.at(-1)!.end)} · {coverage}% played
-        </span>
-        <a
-          href={`https://www.youtube.com/watch?v=${videoId}`}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Open on YouTube ↗
-        </a>
-      </div>
-      {error && (
-        <div className="notice" role="alert">
-          <p>{error}</p>
-          <button
-            className="button secondary"
-            onClick={() => setRetry((n) => n + 1)}
-          >
-            Reload player
-          </button>
-        </div>
-      )}
-      <p className="micro">
-        The app hides its transcript in pass 1. Platform captions or subtitles
-        burned into the video may still appear. Seeking ahead does not count as
-        listening.
-      </p>
-    </section>
+    <Localized>
+      {
+        <section className="youtube-study-player">
+          <div ref={host} className="youtube-study-stage" />
+          {!ready && !error && <p role="status">Loading YouTube player…</p>}
+          <div className="section-heading">
+            <span className="micro">
+              Transcript segment: {formatTime(cues[0].start)}–
+              {formatTime(cues.at(-1)!.end)} · {coverage}% played
+            </span>
+            <a
+              href={`https://www.youtube.com/watch?v=${videoId}`}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Open on YouTube ↗
+            </a>
+          </div>
+          {error && (
+            <div className="notice" role="alert">
+              <p>{error}</p>
+              <button
+                className="button secondary"
+                onClick={() => setRetry((n) => n + 1)}
+              >
+                Reload player
+              </button>
+            </div>
+          )}
+          <p className="micro">
+            The app hides its transcript in pass 1. Platform captions or
+            subtitles burned into the video may still appear. Seeking ahead does
+            not count as listening.
+          </p>
+        </section>
+      }
+    </Localized>
   );
 }

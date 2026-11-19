@@ -1,3 +1,4 @@
+import { Localized } from "./language/Language";
 import { useState } from "react";
 export const quiz = [
   {
@@ -48,102 +49,106 @@ export default function Grammar({
     [finished, setFinished] = useState(false);
   const q = quiz[index];
   return (
-    <>
-      <div className="page-heading">
-        <span className="eyebrow">STRUCTURE LAB · FOUNDATION PRACTICE</span>
-        <h1>
-          A little structure. More freedom<span>.</span>
-        </h1>
-        <p>
-          Five independent foundation checks. Each course day has its own
-          grammar and questions; this optional quiz does not complete a course
-          day.
-        </p>
-      </div>
-      <section className="card quiz-card">
-        {finished ? (
-          <>
-            <span className="eyebrow">SESSION COMPLETE</span>
-            <h2>
-              {score} / {quiz.length}
-            </h2>
+    <Localized>
+      {
+        <>
+          <div className="page-heading">
+            <span className="eyebrow">STRUCTURE LAB · FOUNDATION PRACTICE</span>
+            <h1>
+              A little structure. More freedom<span>.</span>
+            </h1>
             <p>
-              {score >= 3
-                ? "Your foundation practice attempt has been recorded."
-                : "Review the explanations and try again. This foundation quiz does not complete a curriculum day."}
+              Five independent foundation checks. Each course day has its own
+              grammar and questions; this optional quiz does not complete a
+              course day.
             </p>
-            <button
-              className="button primary"
-              onClick={() => {
-                setIndex(0);
-                setChoice(null);
-                setChecked(false);
-                setScore(0);
-                setFinished(false);
-              }}
-            >
-              Practice again
-            </button>
-          </>
-        ) : (
-          <>
-            <div className="section-heading">
-              <span className="pill">
-                Question {index + 1} / {quiz.length}
-              </span>
-              <span>{score} correct</span>
-            </div>
-            <h2 lang="de">{q.q}</h2>
-            <div className="quiz-options">
-              {q.options.map((o, i) => (
+          </div>
+          <section className="card quiz-card">
+            {finished ? (
+              <>
+                <span className="eyebrow">SESSION COMPLETE</span>
+                <h2>
+                  {score} / {quiz.length}
+                </h2>
+                <p>
+                  {score >= 3
+                    ? "Your foundation practice attempt has been recorded."
+                    : "Review the explanations and try again. This foundation quiz does not complete a curriculum day."}
+                </p>
                 <button
-                  key={o}
-                  disabled={checked}
-                  className={
-                    (choice === i ? "selected " : "") +
-                    (checked && q.answer === i ? "correct" : "")
-                  }
-                  onClick={() => setChoice(i)}
+                  className="button primary"
+                  onClick={() => {
+                    setIndex(0);
+                    setChoice(null);
+                    setChecked(false);
+                    setScore(0);
+                    setFinished(false);
+                  }}
                 >
-                  <span>{String.fromCharCode(65 + i)}</span>
-                  {o}
+                  Practice again
                 </button>
-              ))}
-            </div>
-            {checked && (
-              <div className="feedback" role="status">
-                <strong>
-                  {choice === q.answer ? "Exactly." : "Take another look."}
-                </strong>
-                <p>{q.explanation}</p>
-              </div>
+              </>
+            ) : (
+              <>
+                <div className="section-heading">
+                  <span className="pill">
+                    Question {index + 1} / {quiz.length}
+                  </span>
+                  <span>{score} correct</span>
+                </div>
+                <h2 lang="de">{q.q}</h2>
+                <div className="quiz-options" lang="de">
+                  {q.options.map((o, i) => (
+                    <button
+                      key={o}
+                      disabled={checked}
+                      className={
+                        (choice === i ? "selected " : "") +
+                        (checked && q.answer === i ? "correct" : "")
+                      }
+                      onClick={() => setChoice(i)}
+                    >
+                      <span>{String.fromCharCode(65 + i)}</span>
+                      {o}
+                    </button>
+                  ))}
+                </div>
+                {checked && (
+                  <div className="feedback" role="status">
+                    <strong>
+                      {choice === q.answer ? "Exactly." : "Take another look."}
+                    </strong>
+                    <p>{q.explanation}</p>
+                  </div>
+                )}
+                <button
+                  className="button primary"
+                  disabled={choice === null}
+                  onClick={() => {
+                    if (!checked) {
+                      setChecked(true);
+                      if (choice === q.answer) setScore((s) => s + 1);
+                    } else if (index === quiz.length - 1) {
+                      setFinished(true);
+                      onComplete(score);
+                    } else {
+                      setIndex((i) => i + 1);
+                      setChoice(null);
+                      setChecked(false);
+                    }
+                  }}
+                >
+                  {checked
+                    ? index === quiz.length - 1
+                      ? "Finish session"
+                      : "Next question"
+                    : "Check answer"}
+                </button>
+              </>
             )}
-            <button
-              className="button primary"
-              disabled={choice === null}
-              onClick={() => {
-                if (!checked) {
-                  setChecked(true);
-                  if (choice === q.answer) setScore((s) => s + 1);
-                } else if (index === quiz.length - 1) {
-                  setFinished(true);
-                  onComplete(score);
-                } else {
-                  setIndex((i) => i + 1);
-                  setChoice(null);
-                  setChecked(false);
-                }
-              }}
-            >
-              {checked
-                ? index === quiz.length - 1
-                  ? "Finish session"
-                  : "Next question"
-                : "Check answer"}
-            </button>
-          </>
-        )}
-      </section>
-    </>
+          </section>
+        </>
+      }
+    </Localized>
   );
 }

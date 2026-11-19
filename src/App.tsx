@@ -1,3 +1,9 @@
+import {
+  LanguageProvider,
+  LanguageSwitcher,
+  LanguageNotice,
+} from "./features/language/Language";
+import { Localized } from "./features/language/Language";
 import { BookPathProvider } from "./features/book-path/BookPathProgress";
 import type { BookLink } from "./content/book-path/units";
 import type { Location } from "./features/journey/navigation";
@@ -93,17 +99,31 @@ const tools = [
   },
 ] as const;
 export default function App() {
+  return (
+    <LanguageProvider>
+      <AppContent />
+    </LanguageProvider>
+  );
+}
+function AppContent() {
   const l = useLearning();
   return (
-    <StudioProvider key={l.user?.id ?? "guest"} scope={l.user?.id ?? "guest"}>
-      <DictionaryProvider>
-        <CurriculumProvider scope={l.user?.id ?? "guest"}>
-          <BookPathProvider scope={l.user?.id ?? "guest"}>
-            <Workspace learning={l} />
-          </BookPathProvider>
-        </CurriculumProvider>
-      </DictionaryProvider>
-    </StudioProvider>
+    <Localized>
+      {
+        <StudioProvider
+          key={l.user?.id ?? "guest"}
+          scope={l.user?.id ?? "guest"}
+        >
+          <DictionaryProvider>
+            <CurriculumProvider scope={l.user?.id ?? "guest"}>
+              <BookPathProvider scope={l.user?.id ?? "guest"}>
+                <Workspace learning={l} />
+              </BookPathProvider>
+            </CurriculumProvider>
+          </DictionaryProvider>
+        </StudioProvider>
+      }
+    </Localized>
   );
 }
 function Workspace({
@@ -177,270 +197,285 @@ function Workspace({
     l.recordAttempt(day, score, 5);
   }
   return (
-    <div className="app-shell">
-      <a className="skip-link" href="#main">
-        Skip to lesson
-      </a>
-      <aside className="main-sidebar">
-        <a
-          className="brand"
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            setPage("home");
-          }}
-        >
-          <BrandLogo />
-        </a>
-        <span className="nav-caption">YOUR LEARNING SPACE</span>
-        <nav aria-label="Main navigation">
-          {nav.map((n) => (
-            <button
-              key={n.id}
-              className={
-                page === n.id ||
-                (page === "day" && n.id === "plan") ||
-                (optional && n.id === "practice")
-                  ? "active"
-                  : ""
-              }
-              aria-current={
-                page === n.id ||
-                (page === "day" && n.id === "plan") ||
-                (optional && n.id === "practice")
-                  ? "page"
-                  : undefined
-              }
-              onClick={() => setPage(n.id)}
+    <Localized>
+      {
+        <div className="app-shell">
+          <a className="skip-link" href="#main">
+            Skip to lesson
+          </a>
+          <aside className="main-sidebar">
+            <a
+              className="brand"
+              href="#"
+              onClick={(e) => {
+                e.preventDefault();
+                setPage("home");
+              }}
             >
-              <n.icon size={19} />
-              <span>{n.label}</span>
-            </button>
-          ))}
-        </nav>
-        <div className="sidebar-note">
-          <span>✧</span>
-          <p lang="de">
-            Kleine Schritte.
-            <br />
-            Große Möglichkeiten.
-          </p>
-          <small>Small steps. New possibilities.</small>
-        </div>
-        <div className="sidebar-profile">
-          <span className="avatar">
-            {l.user?.user_metadata.full_name?.[0] || "U"}
-          </span>
-          <div>
-            <strong>{l.user ? "Your workspace" : "Uyên’s workspace"}</strong>
-            <small>B1 → B2 · keep going</small>
-          </div>
-        </div>
-      </aside>
-      <div className="workspace">
-        <header className="topbar">
-          <span className="mobile-brand">
-            <BrandLogo />
-          </span>
-          <div>
-            <Globe2 size={15} />
-            <span>Your space</span>
-            <span>/</span>
-            <strong>{label}</strong>
-          </div>
-          <DictionaryButton />
-          <span className="pill level-pill">GERMAN · B1–B2</span>
-        </header>
-        <main id="main">
-          <AccountPanel learning={l} />
-          <Suspense
-            fallback={
-              <div className="card" role="status">
-                Opening your studio…
-              </div>
-            }
-          >
-            <div inert={l.blocked}>
-              {optional && (
-                <div className="journey-context">
-                  <button
-                    className="button subtle"
-                    onClick={() =>
-                      page === "resources"
-                        ? navigate("listening", day, location.from)
-                        : setPage(
-                            location.from === "books" ? "books" : "practice",
-                          )
-                    }
-                  >
-                    {page === "resources"
-                      ? "Back to Listening studio"
-                      : location.from === "books"
-                        ? "Back to My library"
-                        : "Back to Practice tools"}
-                  </button>
-                  <span>
-                    Optional practice · Separate from course completion
-                  </span>
-                </div>
-              )}
-              {page === "home" && (
-                <StudyHome
-                  last={last}
-                  onDay={openDay}
-                  onCourse={() => setPage("plan")}
-                  onBooks={() => setPage("books")}
-                  onBookPath={() =>
-                    navigate("plan", day, undefined, { track: "book" })
+              <BrandLogo />
+            </a>
+            <span className="nav-caption">YOUR LEARNING SPACE</span>
+            <nav aria-label="Main navigation">
+              {nav.map((n) => (
+                <button
+                  key={n.id}
+                  className={
+                    page === n.id ||
+                    (page === "day" && n.id === "plan") ||
+                    (optional && n.id === "practice")
+                      ? "active"
+                      : ""
                   }
-                />
-              )}
-              {page === "review" && (
-                <CourseReview
-                  onDay={openDay}
-                  onCourse={() => setPage("plan")}
-                  onBookDay={(n) =>
-                    navigate("day", n, undefined, { track: "book" })
+                  aria-current={
+                    page === n.id ||
+                    (page === "day" && n.id === "plan") ||
+                    (optional && n.id === "practice")
+                      ? "page"
+                      : undefined
                   }
-                />
-              )}
-              {page === "practice" && (
-                <>
-                  <div className="page-heading">
-                    <span className="eyebrow">OPTIONAL PRACTICE</span>
-                    <h1>
-                      Choose a skill to strengthen<span>.</span>
-                    </h1>
-                    <p>
-                      These independent tools support your course. Start your
-                      daily lesson from Today; studio practice does not mark a
-                      course day complete.
-                    </p>
-                  </div>
-                  <div className="plan-grid">
-                    {tools.map((t) => (
-                      <section className="card" key={t.id}>
-                        <t.icon size={24} />
-                        <h2>{t.label}</h2>
-                        <p>{t.description}</p>
-                        <button
-                          className="button secondary"
-                          onClick={() => navigate(t.id, day, "practice")}
-                        >
-                          Open {t.label}
-                        </button>
-                      </section>
-                    ))}
-                  </div>
-                </>
-              )}
-              {page === "vocabulary" && (
-                <Vocabulary
-                  key={l.user?.id ?? "guest"}
-                  userId={l.user?.id ?? null}
-                  authLoading={l.loading}
-                />
-              )}{" "}
-              {page === "books" && location.from === "day" && (
-                <div className="journey-context">
-                  <button
-                    className="button secondary"
-                    onClick={() =>
-                      navigate("day", day, undefined, { track: "book" })
-                    }
-                  >
-                    Return to day {day} · book practice
-                  </button>
-                  <span>
-                    Book page linked from your course · Core lesson progress is
-                    preserved
-                  </span>
-                </div>
-              )}
-              {page === "books" && (
-                <Books
-                  key={l.user?.id ?? "guest"}
-                  scope={l.user?.id ?? "guest"}
-                  request={location.book}
-                  onLocation={(book) => {
-                    const next = { ...location, book };
-                    window.history.replaceState(
-                      null,
-                      "",
-                      locationUrl(window.location.href, next),
-                    );
-                    setLocation(next);
-                  }}
-                  onListening={() => navigate("listening", day, "books")}
-                />
-              )}
-              {page === "reading" && <Reading />}
-              {page === "resources" && (
-                <Listening
-                  listened={l.listened}
-                  mark={l.markListening}
-                  blocked={l.blocked}
-                />
-              )}{" "}
-              {page === "listening" && (
-                <ListeningStudio
-                  onResources={() => navigate("resources", day, location.from)}
-                />
-              )}
-              {page === "leaderboard" && (
-                <Leaderboard
-                  onReview={() => navigate("spaced", day, location.from)}
-                />
-              )}
-              {page === "spaced" && <Review />}
-              {page === "grammar" && (
-                <Grammar
-                  key={`${day}:${l.user?.id ?? "guest"}`}
-                  day={day}
-                  onComplete={complete}
-                />
-              )}{" "}
-              {page === "plan" && (
-                <CurriculumPlan
-                  onOpen={openDay}
-                  track={location.track}
-                  onTrack={(track) =>
-                    navigate("plan", day, undefined, { track })
-                  }
-                />
-              )}
-              {page === "day" && (
-                <DailyLesson
-                  key={`${l.user?.id ?? "guest"}-${day}`}
-                  day={day}
-                  onOpen={openDay}
-                  onPlan={() =>
-                    navigate("plan", day, undefined, { track: location.track })
-                  }
-                  track={location.track}
-                  onTrack={(track) =>
-                    navigate("day", day, undefined, { track })
-                  }
-                  onBook={openBook}
-                />
-              )}
+                  onClick={() => setPage(n.id)}
+                >
+                  <n.icon size={19} />
+                  <span>{n.label}</span>
+                </button>
+              ))}
+            </nav>
+            <div className="sidebar-note">
+              <span>✧</span>
+              <p lang="de">
+                Kleine Schritte.
+                <br />
+                Große Möglichkeiten.
+              </p>
+              <small>Small steps. New possibilities.</small>
             </div>
-          </Suspense>
-          <footer>
-            <strong>
-              deutsch<span>·</span>
-            </strong>
-            <p>A little every day. A world of possibility.</p>
-            <span>
-              Made for Uyên ✧ ·{" "}
-              <a href="https://ngophuonguyen.github.io/ngophuonguyen21010/">
-                Latest live app ↗
-              </a>{" "}
-              · Build {import.meta.env.VITE_BUILD_SHA?.slice(0, 7) || "local"}
-            </span>
-          </footer>
-        </main>
-      </div>
-    </div>
+            <div className="sidebar-profile">
+              <span className="avatar">
+                {l.user?.user_metadata.full_name?.[0] || "U"}
+              </span>
+              <div>
+                <strong>
+                  {l.user ? "Your workspace" : "Uyên’s workspace"}
+                </strong>
+                <small>B1 → B2 · keep going</small>
+              </div>
+            </div>
+          </aside>
+          <div className="workspace">
+            <header className="topbar">
+              <span className="mobile-brand">
+                <BrandLogo />
+              </span>
+              <div>
+                <Globe2 size={15} />
+                <span>Your space</span>
+                <span>/</span>
+                <strong>{label}</strong>
+              </div>
+              <LanguageSwitcher />
+              <DictionaryButton />
+              <span className="pill level-pill">GERMAN · B1–B2</span>
+            </header>
+            <main id="main">
+              <AccountPanel learning={l} />
+              <LanguageNotice />
+              <Suspense
+                fallback={
+                  <div className="card" role="status">
+                    Opening your studio…
+                  </div>
+                }
+              >
+                <div inert={l.blocked}>
+                  {optional && (
+                    <div className="journey-context">
+                      <button
+                        className="button subtle"
+                        onClick={() =>
+                          page === "resources"
+                            ? navigate("listening", day, location.from)
+                            : setPage(
+                                location.from === "books"
+                                  ? "books"
+                                  : "practice",
+                              )
+                        }
+                      >
+                        {page === "resources"
+                          ? "Back to Listening studio"
+                          : location.from === "books"
+                            ? "Back to My library"
+                            : "Back to Practice tools"}
+                      </button>
+                      <span>
+                        Optional practice · Separate from course completion
+                      </span>
+                    </div>
+                  )}
+                  {page === "home" && (
+                    <StudyHome
+                      last={last}
+                      onDay={openDay}
+                      onCourse={() => setPage("plan")}
+                      onBooks={() => setPage("books")}
+                      onBookPath={() =>
+                        navigate("plan", day, undefined, { track: "book" })
+                      }
+                    />
+                  )}
+                  {page === "review" && (
+                    <CourseReview
+                      onDay={openDay}
+                      onCourse={() => setPage("plan")}
+                      onBookDay={(n) =>
+                        navigate("day", n, undefined, { track: "book" })
+                      }
+                    />
+                  )}
+                  {page === "practice" && (
+                    <>
+                      <div className="page-heading">
+                        <span className="eyebrow">OPTIONAL PRACTICE</span>
+                        <h1>
+                          Choose a skill to strengthen<span>.</span>
+                        </h1>
+                        <p>
+                          These independent tools support your course. Start
+                          your daily lesson from Today; studio practice does not
+                          mark a course day complete.
+                        </p>
+                      </div>
+                      <div className="plan-grid">
+                        {tools.map((t) => (
+                          <section className="card" key={t.id}>
+                            <t.icon size={24} />
+                            <h2>{t.label}</h2>
+                            <p>{t.description}</p>
+                            <button
+                              className="button secondary"
+                              onClick={() => navigate(t.id, day, "practice")}
+                            >
+                              Open {t.label}
+                            </button>
+                          </section>
+                        ))}
+                      </div>
+                    </>
+                  )}
+                  {page === "vocabulary" && (
+                    <Vocabulary
+                      key={l.user?.id ?? "guest"}
+                      userId={l.user?.id ?? null}
+                      authLoading={l.loading}
+                    />
+                  )}{" "}
+                  {page === "books" && location.from === "day" && (
+                    <div className="journey-context">
+                      <button
+                        className="button secondary"
+                        onClick={() =>
+                          navigate("day", day, undefined, { track: "book" })
+                        }
+                      >
+                        Return to day {day} · book practice
+                      </button>
+                      <span>
+                        Book page linked from your course · Core lesson progress
+                        is preserved
+                      </span>
+                    </div>
+                  )}
+                  {page === "books" && (
+                    <Books
+                      key={l.user?.id ?? "guest"}
+                      scope={l.user?.id ?? "guest"}
+                      request={location.book}
+                      onLocation={(book) => {
+                        const next = { ...location, book };
+                        window.history.replaceState(
+                          null,
+                          "",
+                          locationUrl(window.location.href, next),
+                        );
+                        setLocation(next);
+                      }}
+                      onListening={() => navigate("listening", day, "books")}
+                    />
+                  )}
+                  {page === "reading" && <Reading />}
+                  {page === "resources" && (
+                    <Listening
+                      listened={l.listened}
+                      mark={l.markListening}
+                      blocked={l.blocked}
+                    />
+                  )}{" "}
+                  {page === "listening" && (
+                    <ListeningStudio
+                      onResources={() =>
+                        navigate("resources", day, location.from)
+                      }
+                    />
+                  )}
+                  {page === "leaderboard" && (
+                    <Leaderboard
+                      onReview={() => navigate("spaced", day, location.from)}
+                    />
+                  )}
+                  {page === "spaced" && <Review />}
+                  {page === "grammar" && (
+                    <Grammar
+                      key={`${day}:${l.user?.id ?? "guest"}`}
+                      day={day}
+                      onComplete={complete}
+                    />
+                  )}{" "}
+                  {page === "plan" && (
+                    <CurriculumPlan
+                      onOpen={openDay}
+                      track={location.track}
+                      onTrack={(track) =>
+                        navigate("plan", day, undefined, { track })
+                      }
+                    />
+                  )}
+                  {page === "day" && (
+                    <DailyLesson
+                      key={`${l.user?.id ?? "guest"}-${day}`}
+                      day={day}
+                      onOpen={openDay}
+                      onPlan={() =>
+                        navigate("plan", day, undefined, {
+                          track: location.track,
+                        })
+                      }
+                      track={location.track}
+                      onTrack={(track) =>
+                        navigate("day", day, undefined, { track })
+                      }
+                      onBook={openBook}
+                    />
+                  )}
+                </div>
+              </Suspense>
+              <footer>
+                <strong>
+                  deutsch<span>·</span>
+                </strong>
+                <p>A little every day. A world of possibility.</p>
+                <span>
+                  Made for Uyên ✧ ·{" "}
+                  <a href="https://ngophuonguyen.github.io/ngophuonguyen21010/">
+                    Latest live app ↗
+                  </a>{" "}
+                  · Build{" "}
+                  {import.meta.env.VITE_BUILD_SHA?.slice(0, 7) || "local"}
+                </span>
+              </footer>
+            </main>
+          </div>
+        </div>
+      }
+    </Localized>
   );
 }

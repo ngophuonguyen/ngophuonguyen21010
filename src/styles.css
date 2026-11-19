@@ -2919,3 +2919,13 @@ footer > span {
 .book-source { border:1px solid var(--border); border-radius:12px; padding:1rem; margin:.75rem 0; }
 .book-source strong { display:block; color:var(--accent); }
 .book-support summary { cursor:pointer; padding:1rem 0; font-weight:600; }
+
+.study-language-control { display:flex; align-items:center; gap:.5rem; font-size:.875rem; margin-left:auto; }
+.study-language-control select { min-width:110px; padding:.55rem 1.8rem .55rem .7rem; border:1px solid var(--border); border-radius:10px; background:var(--surface); color:var(--ink); }
+.study-language-control span { color:var(--muted); }
+.native-hint { margin:.75rem 0; border-left:2px solid var(--accent); padding:.5rem 1rem; background:var(--surface-raised); border-radius:8px; }
+.native-hint summary { cursor:pointer; color:var(--accent); font-weight:600; }
+.language-storage-error { position:fixed; bottom:1rem; right:1rem; z-index:100; background:var(--surface); padding:1rem; border:1px solid var(--accent); }
+@media(max-width:900px) { .study-language-control span { display:none; } .topbar { flex-wrap:wrap; gap:.5rem; } .study-language-control { margin-left:0; } }
+.native-mode-note { border:1px solid var(--border); border-radius:10px; padding:.7rem 1rem; margin:0 0 1rem; color:var(--muted); font-size:.9rem; }
+.native-mode-note summary { cursor:pointer; color:var(--accent); }

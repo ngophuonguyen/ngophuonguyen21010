@@ -1,3 +1,4 @@
+import { Localized } from "../language/Language";
 import { useEffect, useRef, useState } from "react";
 import { addRange, coveredSeconds, type Cue } from "./model";
 export default function FilePlayer({
@@ -13,7 +14,10 @@ export default function FilePlayer({
 }) {
   const ref = useRef<HTMLAudioElement>(null),
     ranges = useRef<[number, number][]>([]),
-    last = useRef<{ position: number; wall: number } | null>(null),
+    last = useRef<{
+      position: number;
+      wall: number;
+    } | null>(null),
     seconds = useRef(0),
     reported = useRef(false),
     [progress, setProgress] = useState(0),
@@ -59,68 +63,76 @@ export default function FilePlayer({
     if (position >= end && !a.paused) a.pause();
   };
   return (
-    <div className="file-study-player">
-      <audio
-        controls
-        ref={ref}
-        src={url}
-        onLoadedMetadata={() => {
-          const a = ref.current;
-          if (a && a.duration + 0.5 < cues.at(-1)!.end)
-            setError(
-              "This recording is shorter than the transcript. Check the selected file and timings.",
-            );
-        }}
-        onTimeUpdate={() => track(true)}
-        onPlay={() => {
-          if (ref.current)
-            last.current = {
-              position: ref.current.currentTime,
-              wall: performance.now(),
-            };
-        }}
-        onPause={() => {
-          track(true);
-          last.current = null;
-        }}
-        onEnded={() => track(true)}
-        onSeeking={() => {
-          last.current = null;
-        }}
-        onSeeked={() => {
-          const a = ref.current;
-          if (a && !a.paused)
-            last.current = { position: a.currentTime, wall: performance.now() };
-        }}
-        onError={() =>
-          setError(
-            "The recording cannot be played. Try a supported MP3, WAV or M4A file.",
-          )
-        }
-      />
-      <label className="micro">
-        Recording speed
-        <select
-          aria-label="Recording speed"
-          defaultValue="1"
-          onChange={(e) => {
-            if (ref.current) ref.current.playbackRate = Number(e.target.value);
-          }}
-        >
-          <option value=".75">0.75×</option>
-          <option value="1">1×</option>
-          <option value="1.25">1.25×</option>
-        </select>
-      </label>
-      <p className="micro">
-        {progress}% of the transcript segment played. Seeking ahead does not
-        complete a pass.
-      </p>
-      {error && (
-        <p className="notice" role="alert">
-          {error}
-        </p>
-      )}
-    </div>
+    <Localized>
+      {
+        <div className="file-study-player">
+          <audio
+            controls
+            ref={ref}
+            src={url}
+            onLoadedMetadata={() => {
+              const a = ref.current;
+              if (a && a.duration + 0.5 < cues.at(-1)!.end)
+                setError(
+                  "This recording is shorter than the transcript. Check the selected file and timings.",
+                );
+            }}
+            onTimeUpdate={() => track(true)}
+            onPlay={() => {
+              if (ref.current)
+                last.current = {
+                  position: ref.current.currentTime,
+                  wall: performance.now(),
+                };
+            }}
+            onPause={() => {
+              track(true);
+              last.current = null;
+            }}
+            onEnded={() => track(true)}
+            onSeeking={() => {
+              last.current = null;
+            }}
+            onSeeked={() => {
+              const a = ref.current;
+              if (a && !a.paused)
+                last.current = {
+                  position: a.currentTime,
+                  wall: performance.now(),
+                };
+            }}
+            onError={() =>
+              setError(
+                "The recording cannot be played. Try a supported MP3, WAV or M4A file.",
+              )
+            }
+          />
+          <label className="micro">
+            Recording speed
+            <select
+              aria-label="Recording speed"
+              defaultValue="1"
+              onChange={(e) => {
+                if (ref.current)
+                  ref.current.playbackRate = Number(e.target.value);
+              }}
+            >
+              <option value=".75">0.75×</option>
+              <option value="1">1×</option>
+              <option value="1.25">1.25×</option>
+            </select>
+          </label>
+          <p className="micro">
+            {progress}% of the transcript segment played. Seeking ahead does not
+            complete a pass.
+          </p>
+          {error && (
+            <p className="notice" role="alert">
+              {error}
+            </p>
+          )}
+        </div>
+      }
+    </Localized>
   );
 }

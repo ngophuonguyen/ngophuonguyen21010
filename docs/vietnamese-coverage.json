@@ -1,0 +1,8 @@
+{
+  "coreDays": 30,
+  "bookDays": 30,
+  "coreVocabularyExamples": 120,
+  "coreExplainedAnswers": 90,
+  "bookExplainedAnswers": 60,
+  "nativeProductionHints": 90
+}
